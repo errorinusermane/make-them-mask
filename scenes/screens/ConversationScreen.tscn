@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://0xfieumj5smy"]
+
+[ext_resource type="Script" uid="uid://4grjalmooe0b" path="res://scripts/screens/ConversationScreen.gd" id="1_conv"]
+[ext_resource type="Texture2D" uid="uid://3pt1v2kpuvmu" path="res://assets/screens/conversation/background_conversation.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://d0rlydaqw0sex" path="res://assets/screens/conversation/character_my.png" id="3_char"]
+[ext_resource type="Texture2D" uid="uid://lel7l35al76y" path="res://assets/screens/conversation/chat_my.png" id="4_chat"]
+[ext_resource type="Texture2D" uid="uid://y4x4jyf1n1sm" path="res://assets/global/button_skip.svg" id="5_skip_btn"]
+[ext_resource type="Texture2D" uid="uid://by5caof2ttsgp" path="res://assets/global/button_next.svg" id="6_next_btn"]
+
+[node name="ConversationScreen" type="Control" unique_id=2069494593]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_conv")
+
+[node name="Background" type="TextureRect" parent="." unique_id=963797446]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+
+[node name="Chat" type="TextureRect" parent="." unique_id=1982187915]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1124.0
+offset_top = 429.0
+offset_right = -19.0
+offset_bottom = 628.0
+grow_horizontal = 0
+mouse_filter = 0
+texture = ExtResource("4_chat")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NextButton" type="Button" parent="." unique_id=297315471]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -189.0
+offset_top = -189.0
+offset_right = -22.0
+offset_bottom = -22.0
+grow_horizontal = 0
+grow_vertical = 0
+icon = ExtResource("6_next_btn")
+flat = true
+
+[node name="Character" type="TextureRect" parent="." unique_id=1608758981]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -353.0
+offset_top = -1819.0
+offset_right = 534.0
+offset_bottom = -739.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("3_char")
+
+[node name="SkipButton" type="Button" parent="." unique_id=1469077204]
+layout_mode = 0
+offset_left = 750.0
+offset_top = 6.0
+offset_right = 1131.0
+offset_bottom = 129.0
+icon = ExtResource("5_skip_btn")

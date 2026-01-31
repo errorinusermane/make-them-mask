@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3 uid="uid://lmcgyubci02t"]
+
+[ext_resource type="Script" path="res://scripts/screens/MenuScreen.gd" id="1_menu"]
+[ext_resource type="Texture2D" path="res://assets/screens/menu/background_menu.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/screens/menu/button_start.svg" id="3_start_btn"]
+[ext_resource type="Texture2D" path="res://assets/screens/menu/button_book.svg" id="4_book_btn"]
+[ext_resource type="Texture2D" path="res://assets/screens/menu/button_exit.svg" id="5_exit_btn"]
+
+[node name="MenuScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 0
+
+[node name="ActionButtons" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -150.0
+offset_right = 300.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="StartButton" type="Button" parent="ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+icon = ExtResource("3_start_btn")
+flat = true
+mouse_filter = 0
+
+[node name="BookButton" type="Button" parent="ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+icon = ExtResource("4_book_btn")
+flat = true
+mouse_filter = 0
+
+[node name="ExitButton" type="Button" parent="ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+icon = ExtResource("5_exit_btn")
+flat = true
+mouse_filter = 0
