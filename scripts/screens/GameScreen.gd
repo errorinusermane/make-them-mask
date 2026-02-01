@@ -150,7 +150,25 @@ var ear_direction_picker_texture: Texture2D = preload("res://assets/production/e
 var ear_slider_texture: Texture2D = preload("res://assets/production/ear/ear_slider.png")
 var ear_handle_texture: Texture2D = preload("res://assets/production/ear/ear_handle.svg")
 
+# 효과음 리소스
+var sound_button_done: AudioStream = preload("res://assets/sounds/sound_button_done.mp3")
+var sound_button_okay: AudioStream = preload("res://assets/sounds/sound_button_okay.mp3")
+var sound_button_reset: AudioStream = preload("res://assets/sounds/sound_button_reset.mp3")
+var sound_eye_button: AudioStream = preload("res://assets/sounds/sound_eye_button.mp3")
+var sound_nose_button: AudioStream = preload("res://assets/sounds/sound_nose_button.mp3")
+var sound_mouth_lever: AudioStream = preload("res://assets/sounds/sound_mouth_lever.mp3")
+
+# 효과음 플레이어
+var audio_player: AudioStreamPlayer
+
 func _ready() -> void:
+	# 효과음 플레이어 생성
+	audio_player = AudioStreamPlayer.new()
+	audio_player.volume_db = 0.0  # 볼륨 설정 (0dB = 원본 볼륨)
+	add_child(audio_player)
+	# PreviewLayer와 PreviewHead 항상 표시
+	preview_head.visible = true
+	
 	# 타이머 시작
 	total_play_timer.start()
 	mask_creation_timer.start()
@@ -397,6 +415,7 @@ func _on_nose_stop_button_pressed() -> void:
 	if current_step != Step.NOSE:
 		return
 	
+	_play_sound(sound_nose_button)
 	# 첫 번째 클릭: 애니메이션 시작
 	# 두 번째 클릭: 애니메이션 멈춤
 	nose_is_animating = !nose_is_animating
@@ -411,6 +430,7 @@ func _on_mouth_lever_pressed() -> void:
 	if current_step != Step.MOUTH:
 		return
 	
+	_play_sound(sound_mouth_lever)
 	# 토글: 애니메이션 시작/멈춤
 	mouth_is_animating = !mouth_is_animating
 	
@@ -620,6 +640,7 @@ func _calculate_rgb_distance(r1: int, g1: int, b1: int, r2: int, g2: int, b2: in
 func _on_eye_shape_changed(shape: String) -> void:
 	if current_step != Step.EYE:
 		return
+	_play_sound(sound_eye_button)
 	player_eye_shape = shape
 	print("눈 모양 변경: %s" % shape)
 	# TODO: PreviewHead에 실시간 반영
@@ -627,6 +648,7 @@ func _on_eye_shape_changed(shape: String) -> void:
 func _on_eye_color_changed(color: String) -> void:
 	if current_step != Step.EYE:
 		return
+	_play_sound(sound_eye_button)
 	player_eye_color = color
 	print("눈 색상 변경: %s" % color)
 	# TODO: PreviewHead에 실시간 반영
@@ -634,6 +656,7 @@ func _on_eye_color_changed(color: String) -> void:
 func _on_eye_brow_changed(brow: String) -> void:
 	if current_step != Step.EYE:
 		return
+	_play_sound(sound_eye_button)
 	player_eye_brow = brow
 	print("눈썹 변경: %s" % brow)
 	# TODO: PreviewHead에 실시간 반영
@@ -641,6 +664,7 @@ func _on_eye_brow_changed(brow: String) -> void:
 func _on_eye_lash_changed(lash: String) -> void:
 	if current_step != Step.EYE:
 		return
+	_play_sound(sound_eye_button)
 	player_eye_lash = lash
 	print("속눈썹 변경: %s" % lash)
 	# TODO: PreviewHead에 실시간 반영
@@ -666,6 +690,7 @@ func _on_done_button_pressed() -> void:
 	pass
 
 func _on_okay_button_pressed() -> void:
+	_play_sound(sound_button_okay)
 	if current_step == Step.SKIN:
 		# 조건 체크 없이 현재 선택한 값 저장
 		var distance = _calculate_rgb_distance(player_r, player_g, player_b, target_r, target_g, target_b)
@@ -824,6 +849,7 @@ func _on_okay_button_pressed() -> void:
 		_update_ui_for_step()
 
 func _on_reset_button_pressed() -> void:
+	_play_sound(sound_button_reset)
 	print("마스크 제작 리셋 - 모든 점수 초기화")
 	current_step = Step.SKIN
 	mask_data.clear()
@@ -918,6 +944,11 @@ func _on_mask_creation_timer_timeout() -> void:
 	_initialize_mouth_ui()
 	_initialize_ear_ui()
 	_update_ui_for_step()
+
+func _play_sound(sound: AudioStream) -> void:
+	if audio_player and sound:
+		audio_player.stream = sound
+		audio_player.play()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
