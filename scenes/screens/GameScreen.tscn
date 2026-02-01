@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dgy8r1fwqqcy"]
+[gd_scene format=3 uid="uid://dgy8r1fwqqcy"]
 
 [ext_resource type="Script" uid="uid://durqxgb14peb4" path="res://scripts/screens/GameScreen.gd" id="1_game"]
 [ext_resource type="Texture2D" uid="uid://ch0bigac5y80f" path="res://assets/screens/game/background_game.png" id="2_bg"]
@@ -72,10 +72,10 @@ expand_mode = 1
 
 [node name="OkayButton" type="Button" parent="PreviewLayer" unique_id=1251267905]
 layout_mode = 0
-offset_left = 56.0
-offset_top = 443.0
-offset_right = 362.0
-offset_bottom = 551.0
+offset_left = 38.0
+offset_top = 439.0
+offset_right = 344.0
+offset_bottom = 547.0
 icon = ExtResource("4_okay_btn")
 flat = true
 
@@ -117,11 +117,11 @@ grow_horizontal = 0
 grow_vertical = 0
 flat = true
 
-[node name="TotalPlayTimer" type="Timer" parent="."]
+[node name="TotalPlayTimer" type="Timer" parent="." unique_id=975989125]
 wait_time = 300.0
 one_shot = true
 autostart = true
 
-[node name="MaskCreationTimer" type="Timer" parent="."]
+[node name="MaskCreationTimer" type="Timer" parent="." unique_id=1326897031]
 wait_time = 60.0
 one_shot = true
