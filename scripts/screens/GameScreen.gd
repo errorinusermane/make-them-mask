@@ -502,13 +502,40 @@ func _update_ear_handle_position() -> void:
 	ear_handle.position.x = (ear_slider.size.x - ear_handle.size.x) / 2
 
 func _update_ui_for_step() -> void:
-	done_button.visible = false  # Done 버튼은 사용하지 않음
-	okay_button.disabled = (current_step == Step.COMPLETED)
+	# HAIR 단계일 때만 DONE 버튼 활성화, 나머지는 OKAY 버튼 활성화
+	var is_hair_step = (current_step == Step.HAIR)
+	
+	done_button.visible = true
+	okay_button.visible = true
+	
+	if is_hair_step:
+		# HAIR 단계: DONE 활성화, OKAY 비활성화 (회색)
+		done_button.disabled = false
+		done_button.modulate = Color(1, 1, 1, 1)  # 정상 색상
+		okay_button.disabled = true
+		okay_button.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색
+	else:
+		# 다른 단계: OKAY 활성화, DONE 비활성화 (회색)
+		okay_button.disabled = false
+		okay_button.modulate = Color(1, 1, 1, 1)  # 정상 색상
+		done_button.disabled = true
+		done_button.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색
+	
+	# COMPLETED 단계면 둘 다 비활성화
+	if current_step == Step.COMPLETED:
+		done_button.disabled = true
+		okay_button.disabled = true
 	
 	# SKIN 단계
 	var is_skin_step = (current_step == Step.SKIN)
 	if skin_layer:
-		skin_layer.visible = is_skin_step
+		skin_layer.visible = true
+		if is_skin_step:
+			skin_layer.modulate = Color(1, 1, 1, 1)  # 정상 색상
+			skin_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+		else:
+			skin_layer.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색 반투명
+			skin_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	red_slider.editable = is_skin_step
 	green_slider.editable = is_skin_step
 	blue_slider.editable = is_skin_step
@@ -516,50 +543,68 @@ func _update_ui_for_step() -> void:
 	# EYE 단계
 	var is_eye_step = (current_step == Step.EYE)
 	if eye_layer:
-		eye_layer.visible = is_eye_step
-	if is_eye_step:
-		eye_size_slider.editable = true
-		eye_shape_cat_btn.disabled = false
-		eye_shape_dog_btn.disabled = false
-		eye_shape_rabbit_btn.disabled = false
-		eye_color_black_btn.disabled = false
-		eye_color_blue_btn.disabled = false
-		eye_color_red_btn.disabled = false
-		eye_brow_down_btn.disabled = false
-		eye_brow_flat_btn.disabled = false
-		eye_brow_up_btn.disabled = false
-		eye_lash_in_btn.disabled = false
-		eye_lash_no_btn.disabled = false
-		eye_lash_out_btn.disabled = false
+		eye_layer.visible = true
+		if is_eye_step:
+			eye_layer.modulate = Color(1, 1, 1, 1)  # 정상 색상
+			eye_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+			eye_size_slider.editable = true
+			eye_shape_cat_btn.disabled = false
+			eye_shape_dog_btn.disabled = false
+			eye_shape_rabbit_btn.disabled = false
+			eye_color_black_btn.disabled = false
+			eye_color_blue_btn.disabled = false
+			eye_color_red_btn.disabled = false
+			eye_brow_down_btn.disabled = false
+			eye_brow_flat_btn.disabled = false
+			eye_brow_up_btn.disabled = false
+			eye_lash_in_btn.disabled = false
+			eye_lash_no_btn.disabled = false
+			eye_lash_out_btn.disabled = false
+		else:
+			eye_layer.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색 반투명
+			eye_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# NOSE 단계
 	var is_nose_step = (current_step == Step.NOSE)
 	if nose_layer:
-		nose_layer.visible = is_nose_step
-	if is_nose_step:
-		nose_stop_button.disabled = false
-	else:
-		# NOSE 단계가 아니면 애니메이션 중지
-		nose_is_animating = false
+		nose_layer.visible = true
+		if is_nose_step:
+			nose_layer.modulate = Color(1, 1, 1, 1)  # 정상 색상
+			nose_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+			nose_stop_button.disabled = false
+		else:
+			nose_layer.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색 반투명
+			nose_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			# NOSE 단계가 아니면 애니메이션 중지
+			nose_is_animating = false
 	
 	# MOUTH 단계
 	var is_mouth_step = (current_step == Step.MOUTH)
 	if mouth_layer:
-		mouth_layer.visible = is_mouth_step
-	if is_mouth_step:
-		mouth_lever.disabled = false
-	else:
-		# MOUTH 단계가 아니면 애니메이션 중지
-		mouth_is_animating = false
+		mouth_layer.visible = true
+		if is_mouth_step:
+			mouth_layer.modulate = Color(1, 1, 1, 1)  # 정상 색상
+			mouth_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+			mouth_lever.disabled = false
+		else:
+			mouth_layer.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색 반투명
+			mouth_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			# MOUTH 단계가 아니면 애니메이션 중지
+			mouth_is_animating = false
 	
 	# EAR 단계
 	var is_ear_step = (current_step == Step.EAR)
 	if ear_layer:
-		ear_layer.visible = is_ear_step
-	if is_ear_step:
-		ear_direction_top_btn.disabled = false
-		ear_direction_middle_btn.disabled = false
-		ear_direction_bottom_btn.disabled = false
+		ear_layer.visible = true
+		if is_ear_step:
+			ear_layer.modulate = Color(1, 1, 1, 1)  # 정상 색상
+			ear_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+			ear_direction_top_btn.disabled = false
+			ear_direction_middle_btn.disabled = false
+			ear_direction_bottom_btn.disabled = false
+		else:
+			ear_layer.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색 반투명
+			ear_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# COMPLETED 단계면 Result 씬으로 전환
 	if current_step == Step.COMPLETED:
@@ -686,8 +731,13 @@ func _on_eye_size_drag_ended(_value_changed: bool) -> void:
 
 
 func _on_done_button_pressed() -> void:
-	# Done 버튼은 더 이상 사용하지 않음
-	pass
+	_play_sound(sound_button_done)
+	# HAIR 단계에서만 DONE 버튼 작동
+	if current_step == Step.HAIR:
+		# TODO: HAIR 커스터마이징 값 저장 및 점수 계산
+		print("머리 단계 완료 - 모든 커스터마이징 완료!")
+		current_step = Step.COMPLETED
+		_update_ui_for_step()
 
 func _on_okay_button_pressed() -> void:
 	_play_sound(sound_button_okay)
@@ -843,10 +893,9 @@ func _on_okay_button_pressed() -> void:
 		_update_ui_for_step()
 	
 	elif current_step == Step.HAIR:
-		# TODO: HAIR 커스터마이징 값 저장 및 점수 계산
-		print("머리 단계 완료 - 모든 커스터마이징 완료!")
-		current_step = Step.COMPLETED
-		_update_ui_for_step()
+		# HAIR 단계에서는 OKAY 버튼이 아니라 DONE 버튼을 사용해야 함
+		print("HAIR 단계에서는 DONE 버튼을 눌러주세요!")
+		pass
 
 func _on_reset_button_pressed() -> void:
 	_play_sound(sound_button_reset)
