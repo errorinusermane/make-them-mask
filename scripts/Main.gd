@@ -11,6 +11,7 @@ const SCREENS = {
 }
 
 var current_screen: Node = null
+var game_score: int = 0  # GameScreen에서 전달받은 점수 저장
 
 func _ready() -> void:
 	print("Main initialized. Setting up window...")
@@ -40,6 +41,11 @@ func change_screen(screen_name: String) -> void:
 				current_screen.offset_top = 0
 				current_screen.offset_right = 0
 				current_screen.offset_bottom = 0
+			
+			# ResultScreen에 점수 전달
+			if screen_name == "result" and current_screen.has_method("set_score"):
+				current_screen.set_score(game_score)
+			
 			if current_screen.has_signal("transition_requested"):
 				current_screen.transition_requested.connect(_on_transition_requested)
 		else:
@@ -47,4 +53,15 @@ func change_screen(screen_name: String) -> void:
 
 func _on_transition_requested(next_screen_name: String) -> void:
 	print("Main: Transition requested to ", next_screen_name)
+	
+	# GameScreen에서 Result로 전환 시 점수 저장
+	if current_screen and current_screen.name == "GameScreen" and next_screen_name == "result":
+		if current_screen.has_method("get_final_score"):
+			game_score = current_screen.get_final_score()
+			print("Main: 게임 점수 저장 = %d" % game_score)
+		elif "payout" in current_screen:
+			game_score = current_screen.payout
+			print("Main: 게임 점수 저장 (payout) = %d" % game_score)
+	
+	change_screen(next_screen_name)
 	change_screen(next_screen_name)

@@ -20,9 +20,9 @@ var payout: int = 0
 var player_r: int = 0
 var player_g: int = 0
 var player_b: int = 0
-var target_r: int = 100
-var target_g: int = 150
-var target_b: int = 200
+var target_r: int = 169  # A98B8B → RGB(169, 139, 139)
+var target_g: int = 139
+var target_b: int = 139
 
 # Eye 단계 변수
 var player_eye_shape: String = "cat"  # cat, dog, rabbit
@@ -30,22 +30,22 @@ var player_eye_color: String = "black"  # black, blue, red
 var player_eye_brow: String = "flat"  # down, flat, up
 var player_eye_lash: String = "no"  # in, no, out
 var player_eye_size: int = 0  # 0=S, 1=M, 2=L, 3=XL, 4=XXL
-var target_eye_shape: String = "dog"
-var target_eye_color: String = "blue"
-var target_eye_brow: String = "up"
-var target_eye_lash: String = "out"
-var target_eye_size: int = 3
+var target_eye_shape: String = "dog"  # 강아지
+var target_eye_color: String = "black"  # 검정 (명시되지 않아 기본값)
+var target_eye_brow: String = "flat"  # 중
+var target_eye_lash: String = "in"  # 속쌍
+var target_eye_size: int = 2  # L
 
 # Nose 단계 변수
 var player_nose_size: int = 0  # 0=S, 1=M, 2=L, 3=XL, 4=XXL
-var target_nose_size: int = 3
+var target_nose_size: int = 2  # L
 var nose_is_animating: bool = false  # stop button으로 애니메이션 제어
 var nose_animation_timer: float = 0.0
 var nose_animation_speed: float = 0.1  # 레벨 변경 간격(초)
 
 # Mouth 단계 변수
 var player_mouth_size: int = 2  # 0=S, 1=M, 2=L, 3=XL, 4=XXL
-var target_mouth_size: int = 3
+var target_mouth_size: int = 3  # XL
 var mouth_is_animating: bool = false  # lever로 애니메이션 제어
 var mouth_animation_timer: float = 0.0
 var mouth_animation_speed: float = 0.08  # 레벨 변경 간격(초)
@@ -54,13 +54,14 @@ var mouth_direction: int = 1  # 1=오른쪽(증가), -1=왼쪽(감소)
 # Ear 단계 변수
 var player_ear_position: String = ""  # "top"(엘프귀), "middle"(일반), "bottom"(부처님 귀)
 var player_ear_size: int = 0  # 0=S, 1=M, 2=L, 3=XL, 4=XXL
-var target_ear_position: String = "middle"
-var target_ear_size: int = 2
+var target_ear_position: String = "top"  # 상 (엘프귀)
+var target_ear_size: int = 0  # S
 
 # 노드 참조
 @onready var total_play_timer: Timer = $TotalPlayTimer
 @onready var mask_creation_timer: Timer = $MaskCreationTimer
 @onready var done_button: Button = $DoneButton
+@onready var preview_layer: TextureRect = $PreviewLayer
 @onready var okay_button: Button = $PreviewLayer/OkayButton
 @onready var reset_button: Button = $ResetButton
 
@@ -116,6 +117,11 @@ var target_ear_size: int = 2
 @onready var ear_slider: VSlider = $EarLayer/EarSlider
 @onready var ear_handle: TextureRect = $EarLayer/EarSlider/EarHandle
 
+# ORDER 단계 노드
+@onready var order_layer: TextureRect = $OrderLayer
+@onready var order_form: TextureRect = $OrderLayer/OrderForm
+@onready var order_target_image: TextureRect = $OrderLayer/OrderTargetImage
+
 # 텍스처 리소스
 var skin_handle_texture: Texture2D = preload("res://assets/production/skin/skin_handle.svg")
 
@@ -150,6 +156,11 @@ var ear_direction_picker_texture: Texture2D = preload("res://assets/production/e
 var ear_slider_texture: Texture2D = preload("res://assets/production/ear/ear_slider.png")
 var ear_handle_texture: Texture2D = preload("res://assets/production/ear/ear_handle.svg")
 
+# Order 리소스
+var order_layer_texture: Texture2D = preload("res://assets/production/order/order_layer.png")
+var order_form_texture: Texture2D = preload("res://assets/production/order/order_form.png")
+var order_target_image_texture: Texture2D = preload("res://assets/production/order/order_target_image.png")
+
 # 효과음 리소스
 var sound_button_done: AudioStream = preload("res://assets/sounds/sound_button_done.mp3")
 var sound_button_okay: AudioStream = preload("res://assets/sounds/sound_button_okay.mp3")
@@ -166,8 +177,39 @@ func _ready() -> void:
 	audio_player = AudioStreamPlayer.new()
 	audio_player.volume_db = 0.0  # 볼륨 설정 (0dB = 원본 볼륨)
 	add_child(audio_player)
-	# PreviewLayer와 PreviewHead 항상 표시
-	preview_head.visible = true
+	
+	# OrderLayer 설정
+	if order_layer:
+		order_layer.z_index = 150  # PreviewLayer보다 위
+		order_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	if order_form:
+		order_form.texture = order_form_texture
+	if order_target_image:
+		order_target_image.texture = order_target_image_texture
+	
+	
+	# PreviewLayer와 PreviewHead 항상 표시 및 맨 위로 올리기
+	if preview_layer:
+		preview_layer.z_index = 100  # 다른 레이어들보다 높은 z_index
+		preview_layer.visible = true
+		preview_layer.modulate = Color(1, 1, 1, 1)
+	
+	if preview_head:
+		preview_head.visible = true
+		preview_head.modulate = Color(0, 0, 0, 1)  # 초기 색상 (검정, 완전 불투명)
+	
+	# 다른 레이어들의 z_index 설정 (PreviewLayer보다 낮게)
+	if skin_layer:
+		skin_layer.z_index = 0
+	if eye_layer:
+		eye_layer.z_index = 0
+	if nose_layer:
+		nose_layer.z_index = 0
+	if mouth_layer:
+		mouth_layer.z_index = 0
+	if ear_layer:
+		ear_layer.z_index = 0
 	
 	# 타이머 시작
 	total_play_timer.start()
@@ -502,6 +544,15 @@ func _update_ear_handle_position() -> void:
 	ear_handle.position.x = (ear_slider.size.x - ear_handle.size.x) / 2
 
 func _update_ui_for_step() -> void:
+	# PreviewLayer와 PreviewHead는 항상 표시 (정상 색상 유지)
+	if preview_layer:
+		preview_layer.visible = true
+		preview_layer.modulate = Color(1, 1, 1, 1)  # 정상 색상 유지
+	if preview_head:
+		preview_head.visible = true
+		# preview_head의 RGB는 skin 색상에 따라 변하지만, 알파는 1.0 유지
+		preview_head.modulate.a = 1.0  # 알파값은 1로 유지 (완전 불투명)
+	
 	# HAIR 단계일 때만 DONE 버튼 활성화, 나머지는 OKAY 버튼 활성화
 	var is_hair_step = (current_step == Step.HAIR)
 	
@@ -623,9 +674,11 @@ func _on_slider_value_changed(value: float) -> void:
 	player_g = int(green_slider.value)
 	player_b = int(blue_slider.value)
 	
-	# PreviewHead 색상 업데이트 (0~1 범위로 변환)
-	var current_color = Color(player_r / 255.0, player_g / 255.0, player_b / 255.0)
+	# PreviewHead 색상 업데이트 (0~1 범위로 변환, 알파는 항상 1.0)
+	var current_color = Color(player_r / 255.0, player_g / 255.0, player_b / 255.0, 1.0)
 	preview_head.modulate = current_color
+	
+	print("피부 색상 변경: R=%d G=%d B=%d" % [player_r, player_g, player_b])
 	
 	# 핸들 위치 업데이트
 	_update_handle_position(red_slider, red_handle)

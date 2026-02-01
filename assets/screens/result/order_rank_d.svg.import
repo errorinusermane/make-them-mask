@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dko6ehk43trn0"
-path="res://.godot/imported/order_rank_f.svg-290b9b523f8fec80c3075b0601c30443.ctex"
+uid="uid://bui6iae4qqc77"
+path="res://.godot/imported/order_rank_d.svg-29d8e78270146e48d9c5aed7c4ff8776.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/production/order/order_rank_f.svg"
-dest_files=["res://.godot/imported/order_rank_f.svg-290b9b523f8fec80c3075b0601c30443.ctex"]
+source_file="res://assets/screens/result/order_rank_d.svg"
+dest_files=["res://.godot/imported/order_rank_d.svg-29d8e78270146e48d9c5aed7c4ff8776.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buu2s8mvotamv"
-path="res://.godot/imported/order_rank_c.svg-4c03df21ef118b4183921486ddd15cc2.ctex"
+uid="uid://dvds307dkambp"
+path="res://.godot/imported/order_receipt.png-4cba49b367897ca654b82cb445db3070.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/production/order/order_rank_c.svg"
-dest_files=["res://.godot/imported/order_rank_c.svg-4c03df21ef118b4183921486ddd15cc2.ctex"]
+source_file="res://assets/screens/result/order_receipt.png"
+dest_files=["res://.godot/imported/order_receipt.png-4cba49b367897ca654b82cb445db3070.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

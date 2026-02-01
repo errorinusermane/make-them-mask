@@ -43,6 +43,8 @@
 [ext_resource type="Texture2D" uid="uid://cdnnepewp1uxp" path="res://assets/production/ear/ear_direction_picker.svg" id="41_ear_picker"]
 [ext_resource type="Texture2D" uid="uid://cmh8m8hmwoc4c" path="res://assets/production/ear/ear_slider.png" id="42_ear_slider"]
 [ext_resource type="Texture2D" uid="uid://bc0whghh2mvgm" path="res://assets/production/ear/ear_handle.svg" id="43_ear_handle"]
+[ext_resource type="Texture2D" uid="uid://cw6h6phgcr5hi" path="res://assets/production/order/order_form.png" id="44_order_form"]
+[ext_resource type="Texture2D" uid="uid://bq2p5we187n1s" path="res://assets/production/order/order_layer.png" id="45_order_layer"]
 
 [node name="GameScreen" type="Control" unique_id=342452374]
 layout_mode = 3
@@ -65,20 +67,20 @@ expand_mode = 1
 
 [node name="DoneButton" type="Button" parent="." unique_id=1122334455]
 layout_mode = 0
-offset_left = 937.0
-offset_top = 545.0
-offset_right = 1141.0
-offset_bottom = 617.0
+offset_left = 929.0
+offset_top = 543.0
+offset_right = 1133.0
+offset_bottom = 615.0
 icon = ExtResource("3_done_btn")
 flat = true
 expand_icon = true
 
 [node name="ResetButton" type="Button" parent="." unique_id=1997254458]
 layout_mode = 0
-offset_left = 928.0
-offset_top = 52.0
-offset_right = 1139.1067
-offset_bottom = 124.0
+offset_left = 929.0
+offset_top = 33.0
+offset_right = 1140.1067
+offset_bottom = 105.0
 icon = ExtResource("5_reset_btn")
 flat = true
 expand_icon = true
@@ -579,3 +581,35 @@ autostart = true
 [node name="MaskCreationTimer" type="Timer" parent="." unique_id=1326897031]
 wait_time = 60.0
 one_shot = true
+
+[node name="OrderForm" type="TextureRect" parent="." unique_id=1800000001]
+layout_mode = 0
+offset_left = 935.0
+offset_top = 230.0
+offset_right = 1130.0
+offset_bottom = 541.0
+texture = ExtResource("44_order_form")
+expand_mode = 1
+
+[node name="OrderLayer" type="TextureRect" parent="." unique_id=1800000000]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 932.0
+offset_top = 112.0
+offset_right = -25.0
+offset_bottom = -421.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("45_order_layer")
+expand_mode = 1
+
+[node name="OrderTargetImage" type="TextureRect" parent="OrderLayer" unique_id=1800000002]
+layout_mode = 0
+offset_left = -79.0
+offset_top = -562.0
+offset_right = 221.0
+offset_bottom = -162.0
+texture = ExtResource("9_preview_layer")
+expand_mode = 1
