@@ -38,6 +38,11 @@
 [ext_resource type="Texture2D" uid="uid://dflue3pfq7gon" path="res://assets/production/mouth/mouth_lever.svg" id="36_mouth_lever"]
 [ext_resource type="Texture2D" uid="uid://boprq0yggjis5" path="res://assets/production/mouth/mouth_size_chart.svg" id="37_mouth_chart"]
 [ext_resource type="Texture2D" uid="uid://cutrwidjr6ump" path="res://assets/production/mouth/mouth_size_arrow.svg" id="38_mouth_arrow"]
+[ext_resource type="Texture2D" uid="uid://bc6q85b2e5bc2" path="res://assets/production/ear/ear_layer.svg" id="39_ear_layer"]
+[ext_resource type="Texture2D" uid="uid://bfkard1gmehn5" path="res://assets/production/ear/ear_direction.svg" id="40_ear_direction"]
+[ext_resource type="Texture2D" uid="uid://cdnnepewp1uxp" path="res://assets/production/ear/ear_direction_picker.svg" id="41_ear_picker"]
+[ext_resource type="Texture2D" uid="uid://cmh8m8hmwoc4c" path="res://assets/production/ear/ear_slider.png" id="42_ear_slider"]
+[ext_resource type="Texture2D" uid="uid://bc0whghh2mvgm" path="res://assets/production/ear/ear_handle.svg" id="43_ear_handle"]
 
 [node name="GameScreen" type="Control" unique_id=342452374]
 layout_mode = 3
@@ -60,20 +65,20 @@ expand_mode = 1
 
 [node name="DoneButton" type="Button" parent="." unique_id=1122334455]
 layout_mode = 0
-offset_left = 882.0
-offset_top = 500.0
-offset_right = 1188.0
-offset_bottom = 608.0
+offset_left = 937.0
+offset_top = 545.0
+offset_right = 1141.0
+offset_bottom = 617.0
 icon = ExtResource("3_done_btn")
 flat = true
 expand_icon = true
 
 [node name="ResetButton" type="Button" parent="." unique_id=1997254458]
 layout_mode = 0
-offset_left = 870.0
-offset_top = 53.0
-offset_right = 1172.0
-offset_bottom = 156.0
+offset_left = 928.0
+offset_top = 52.0
+offset_right = 1139.1067
+offset_bottom = 124.0
 icon = ExtResource("5_reset_btn")
 flat = true
 expand_icon = true
@@ -418,15 +423,92 @@ icon = ExtResource("36_mouth_lever")
 flat = true
 expand_icon = true
 
+[node name="EarLayer" type="TextureRect" parent="." unique_id=1696012355]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 317.0
+offset_top = 57.0
+offset_right = -613.0
+offset_bottom = -381.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("39_ear_layer")
+expand_mode = 1
+
+[node name="EarDirection" type="TextureRect" parent="EarLayer" unique_id=1697012356]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 24.38095
+offset_right = 117.0
+offset_bottom = 181.0
+texture = ExtResource("40_ear_direction")
+expand_mode = 1
+
+[node name="EarDirectionTopButton" type="Button" parent="EarLayer" unique_id=1698012357]
+layout_mode = 0
+offset_left = 79.0
+offset_top = 23.0
+offset_right = 139.0
+offset_bottom = 53.0
+icon = ExtResource("41_ear_picker")
+flat = true
+expand_icon = true
+
+[node name="EarDirectionMiddleButton" type="Button" parent="EarLayer" unique_id=1699012358]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 115.0
+offset_right = 124.0
+offset_bottom = 145.0
+icon = ExtResource("41_ear_picker")
+flat = true
+expand_icon = true
+
+[node name="EarDirectionBottomButton" type="Button" parent="EarLayer" unique_id=1700012359]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 162.0
+offset_right = 87.0
+offset_bottom = 192.0
+icon = ExtResource("41_ear_picker")
+flat = true
+expand_icon = true
+
+[node name="EarSlider" type="VSlider" parent="EarLayer" unique_id=1701012360]
+layout_mode = 0
+offset_left = 134.0
+offset_top = 23.0
+offset_right = 184.0
+offset_bottom = 184.0
+
+[node name="EarSliderBackground" type="TextureRect" parent="EarLayer/EarSlider" unique_id=1702012361]
+layout_mode = 0
+offset_left = 16.0
+offset_right = 41.0
+offset_bottom = 147.05882
+texture = ExtResource("42_ear_slider")
+expand_mode = 1
+
+[node name="EarHandle" type="TextureRect" parent="EarLayer/EarSlider" unique_id=1703012362]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 130.0
+offset_right = 46.0
+offset_bottom = 169.0
+texture = ExtResource("43_ear_handle")
+expand_mode = 1
+
 [node name="PreviewLayer" type="TextureRect" parent="." unique_id=1286608618]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 514.0
-offset_top = 61.0
-offset_right = -271.0
-offset_bottom = -23.0
+offset_left = 552.0
+offset_top = 57.0
+offset_right = -233.0
+offset_bottom = -27.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("9_preview_layer")
@@ -443,10 +525,10 @@ expand_mode = 1
 
 [node name="OkayButton" type="Button" parent="PreviewLayer" unique_id=1251267905]
 layout_mode = 0
-offset_left = 38.0
-offset_top = 439.0
-offset_right = 344.0
-offset_bottom = 547.0
+offset_left = 86.0
+offset_top = 462.0
+offset_right = 295.66666
+offset_bottom = 536.0
 icon = ExtResource("4_okay_btn")
 flat = true
 expand_icon = true

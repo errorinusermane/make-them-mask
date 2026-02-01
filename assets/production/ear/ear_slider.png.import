@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cn0qmsp8qpi3x"
-path="res://.godot/imported/ear_slider.svg-6289fded0f65409bef4fe484d0814309.ctex"
+uid="uid://cmh8m8hmwoc4c"
+path="res://.godot/imported/ear_slider.png-da374379eb411476038cdbff406e318b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/production/ear/ear_slider.svg"
-dest_files=["res://.godot/imported/ear_slider.svg-6289fded0f65409bef4fe484d0814309.ctex"]
+source_file="res://assets/production/ear/ear_slider.png"
+dest_files=["res://.godot/imported/ear_slider.png-da374379eb411476038cdbff406e318b.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

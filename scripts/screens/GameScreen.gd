@@ -51,6 +51,12 @@ var mouth_animation_timer: float = 0.0
 var mouth_animation_speed: float = 0.08  # 레벨 변경 간격(초)
 var mouth_direction: int = 1  # 1=오른쪽(증가), -1=왼쪽(감소)
 
+# Ear 단계 변수
+var player_ear_position: String = ""  # "top"(엘프귀), "middle"(일반), "bottom"(부처님 귀)
+var player_ear_size: int = 0  # 0=S, 1=M, 2=L, 3=XL, 4=XXL
+var target_ear_position: String = "middle"
+var target_ear_size: int = 2
+
 # 노드 참조
 @onready var total_play_timer: Timer = $TotalPlayTimer
 @onready var mask_creation_timer: Timer = $MaskCreationTimer
@@ -101,6 +107,15 @@ var mouth_direction: int = 1  # 1=오른쪽(증가), -1=왼쪽(감소)
 @onready var mouth_size_chart: TextureRect = $MouthLayer/MouthSizeChart
 @onready var mouth_size_arrow: TextureRect = $MouthLayer/MouthSizeArrow
 
+# EAR 단계 노드
+@onready var ear_layer: TextureRect = $EarLayer
+@onready var ear_direction: TextureRect = $EarLayer/EarDirection
+@onready var ear_direction_top_btn: Button = $EarLayer/EarDirectionTopButton
+@onready var ear_direction_middle_btn: Button = $EarLayer/EarDirectionMiddleButton
+@onready var ear_direction_bottom_btn: Button = $EarLayer/EarDirectionBottomButton
+@onready var ear_slider: VSlider = $EarLayer/EarSlider
+@onready var ear_handle: TextureRect = $EarLayer/EarSlider/EarHandle
+
 # 텍스처 리소스
 var skin_handle_texture: Texture2D = preload("res://assets/production/skin/skin_handle.svg")
 
@@ -127,6 +142,12 @@ var mouth_layer_texture: Texture2D = preload("res://assets/production/mouth/mout
 var mouth_lever_texture: Texture2D = preload("res://assets/production/mouth/mouth_lever.svg")
 var mouth_size_chart_texture: Texture2D = preload("res://assets/production/mouth/mouth_size_chart.svg")
 var mouth_size_arrow_texture: Texture2D = preload("res://assets/production/mouth/mouth_size_arrow.svg")
+
+var ear_layer_texture: Texture2D = preload("res://assets/production/ear/ear_layer.svg")
+var ear_direction_texture: Texture2D = preload("res://assets/production/ear/ear_direction.svg")
+var ear_direction_picker_texture: Texture2D = preload("res://assets/production/ear/ear_direction_picker.svg")
+var ear_slider_texture: Texture2D = preload("res://assets/production/ear/ear_slider.png")
+var ear_handle_texture: Texture2D = preload("res://assets/production/ear/ear_handle.svg")
 
 func _ready() -> void:
 	# 타이머 시작
@@ -197,11 +218,22 @@ func _ready() -> void:
 	# MOUTH 버튼 시그널 연결
 	mouth_lever.pressed.connect(_on_mouth_lever_pressed)
 	
+	# EAR 버튼 시그널 연결
+	ear_direction_top_btn.pressed.connect(_on_ear_direction_changed.bind("top"))
+	ear_direction_middle_btn.pressed.connect(_on_ear_direction_changed.bind("middle"))
+	ear_direction_bottom_btn.pressed.connect(_on_ear_direction_changed.bind("bottom"))
+	ear_slider.value_changed.connect(_on_ear_slider_value_changed)
+	ear_slider.drag_ended.connect(_on_ear_slider_drag_ended)
+	
+	# 핸들 텍스처 설정
+	ear_handle.texture = ear_handle_texture
+	
 	# 초기화
 	_initialize_skin_ui()
 	_initialize_eye_ui()
 	_initialize_nose_ui()
 	_initialize_mouth_ui()
+	_initialize_ear_ui()
 	_update_ui_for_step()
 
 
@@ -265,6 +297,28 @@ func _initialize_mouth_ui() -> void:
 	
 	# 화살표 초기 위치 업데이트
 	_update_mouth_arrow_position()
+
+func _initialize_ear_ui() -> void:
+	# 초기값 설정 - 전체 비활성화 상태
+	player_ear_position = ""
+	player_ear_size = 0  # S
+	
+	# 슬라이더 범위: 0~4 (5단계: S/M/L/XL/XXL)
+	ear_slider.min_value = 0
+	ear_slider.max_value = 4
+	ear_slider.step = 1
+	ear_slider.tick_count = 5
+	ear_slider.ticks_on_borders = true
+	
+	# 초기값 설정
+	ear_slider.value = 0
+	ear_slider.editable = false  # 위치 선택 전까지 비활성화
+	
+	# 모든 버튼 비활성 표시
+	_update_ear_button_states()
+	
+	# 초기 핸들 위치 업데이트
+	_update_ear_handle_position()
 
 func _process(delta: float) -> void:
 	if current_step == Step.NOSE and nose_is_animating:
@@ -365,6 +419,63 @@ func _on_mouth_lever_pressed() -> void:
 		var size_names = ["S", "M", "L", "XL", "XXL"]
 		print("입 크기 애니메이션 멈춤: %s (%d)" % [size_names[player_mouth_size], player_mouth_size])
 
+func _on_ear_direction_changed(ear_position: String) -> void:
+	if current_step != Step.EAR:
+		return
+	
+	# 다른 위치를 선택하면 슬라이더 초기화
+	if player_ear_position != ear_position:
+		player_ear_position = ear_position
+		player_ear_size = 0  # S로 리셋
+		ear_slider.value = 0
+		ear_slider.editable = true  # 슬라이더 활성화
+		
+		var position_names = {"top": "엘프귀", "middle": "일반", "bottom": "부처님 귀"}
+		print("귀 위치 선택: %s" % position_names[ear_position])
+	
+	# 버튼 상태 업데이트
+	_update_ear_button_states()
+	_update_ear_handle_position()
+
+func _on_ear_slider_value_changed(value: float) -> void:
+	if current_step != Step.EAR:
+		return
+	
+	player_ear_size = int(value)
+	_update_ear_handle_position()
+	
+	var size_names = ["S", "M", "L", "XL", "XXL"]
+	print("귀 크기 변경: %s (%d)" % [size_names[player_ear_size], player_ear_size])
+
+func _on_ear_slider_drag_ended(_value_changed: bool) -> void:
+	if current_step != Step.EAR:
+		return
+	# 이미 step=1이므로 정수값으로 스냅됨
+	pass
+
+func _update_ear_button_states() -> void:
+	# 선택된 버튼만 활성 표시 (시각적 피드백은 나중에 추가 가능)
+	# 지금은 기본 동작만 구현
+	pass
+
+func _update_ear_handle_position() -> void:
+	if not ear_slider or not ear_handle:
+		return
+	
+	# 세로 슬라이더: 5단계 (S=0 -> XXL=4)
+	# 아래(S)에서 위(XXL)로 이동
+	var slider_range = ear_slider.max_value - ear_slider.min_value
+	if slider_range == 0:
+		return
+	
+	var normalized_value = (ear_slider.value - ear_slider.min_value) / slider_range
+	var track_length = ear_slider.size.y
+	var handle_height = ear_handle.size.y
+	
+	# 세로 슬라이더는 위가 max, 아래가 min이므로 반전
+	ear_handle.position.y = (1.0 - normalized_value) * (track_length - handle_height)
+	ear_handle.position.x = (ear_slider.size.x - ear_handle.size.x) / 2
+
 func _update_ui_for_step() -> void:
 	done_button.visible = false  # Done 버튼은 사용하지 않음
 	okay_button.disabled = (current_step == Step.COMPLETED)
@@ -415,6 +526,15 @@ func _update_ui_for_step() -> void:
 	else:
 		# MOUTH 단계가 아니면 애니메이션 중지
 		mouth_is_animating = false
+	
+	# EAR 단계
+	var is_ear_step = (current_step == Step.EAR)
+	if ear_layer:
+		ear_layer.visible = is_ear_step
+	if is_ear_step:
+		ear_direction_top_btn.disabled = false
+		ear_direction_middle_btn.disabled = false
+		ear_direction_bottom_btn.disabled = false
 	
 	# COMPLETED 단계면 Result 씬으로 전환
 	if current_step == Step.COMPLETED:
@@ -657,8 +777,38 @@ func _on_okay_button_pressed() -> void:
 		_update_ui_for_step()
 	
 	elif current_step == Step.EAR:
-		# TODO: EAR 커스터마이징 값 저장 및 점수 계산
-		print("귀 단계 완료 - 다음 단계로 진행")
+		# 점수 계산
+		var ear_score = 0
+		
+		# 위치를 선택하지 않으면 0점
+		if player_ear_position == "":
+			ear_score = 0
+		else:
+			# 위치 점수 (50점)
+			if player_ear_position == target_ear_position:
+				ear_score += 50
+			
+			# 크기 점수 (50점)
+			if player_ear_size == target_ear_size:
+				ear_score += 50
+			else:
+				var distance = abs(player_ear_size - target_ear_size)
+				ear_score += max(0, 50 - distance * 12)
+		
+		# 최종 값 저장
+		mask_data["ear_position"] = player_ear_position
+		mask_data["ear_size"] = player_ear_size
+		mask_data["ear_score"] = ear_score
+		payout += ear_score
+		
+		var size_names = ["S", "M", "L", "XL", "XXL"]
+		var position_names = {"top": "엘프귀", "middle": "일반", "bottom": "부처님 귀", "": "선택 안함"}
+		print("귀 저장: 위치=%s 크기=%s | 점수: %d | 총점: %d" % [
+			position_names[player_ear_position], 
+			size_names[player_ear_size] if player_ear_position != "" else "N/A",
+			ear_score, payout
+		])
+		
 		current_step = Step.HAIR
 		_update_ui_for_step()
 	
@@ -701,12 +851,17 @@ func _on_reset_button_pressed() -> void:
 	mouth_animation_timer = 0.0
 	mouth_direction = 1
 	
+	# EAR 리셋
+	player_ear_position = ""
+	player_ear_size = 0
+	
 	mask_creation_timer.stop()
 	mask_creation_timer.start()
 	_initialize_skin_ui()
 	_initialize_eye_ui()
 	_initialize_nose_ui()
 	_initialize_mouth_ui()
+	_initialize_ear_ui()
 	_update_ui_for_step()
 	print("총점 리셋: %d" % payout)
 
@@ -747,11 +902,16 @@ func _on_mask_creation_timer_timeout() -> void:
 	mouth_animation_timer = 0.0
 	mouth_direction = 1
 	
+	# EAR 리셋
+	player_ear_position = ""
+	player_ear_size = 0
+	
 	mask_creation_timer.start()
 	_initialize_skin_ui()
 	_initialize_eye_ui()
 	_initialize_nose_ui()
 	_initialize_mouth_ui()
+	_initialize_ear_ui()
 	_update_ui_for_step()
 
 func _unhandled_input(event: InputEvent) -> void:
