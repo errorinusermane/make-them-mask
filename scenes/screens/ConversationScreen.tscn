@@ -50,14 +50,15 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -189.0
-offset_top = -189.0
+offset_left = -101.0
+offset_top = -101.0
 offset_right = -22.0
 offset_bottom = -22.0
 grow_horizontal = 0
 grow_vertical = 0
 icon = ExtResource("6_next_btn")
 flat = true
+expand_icon = true
 
 [node name="Character" type="TextureRect" parent="." unique_id=1608758981]
 layout_mode = 1
@@ -66,18 +67,19 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -353.0
-offset_top = -1819.0
-offset_right = 534.0
-offset_bottom = -739.0
+offset_left = -836.0
+offset_top = -1835.0
+offset_right = 51.0
+offset_bottom = -755.0
 grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("3_char")
 
 [node name="SkipButton" type="Button" parent="." unique_id=1469077204]
 layout_mode = 0
-offset_left = 750.0
-offset_top = 6.0
-offset_right = 1131.0
-offset_bottom = 129.0
+offset_left = 864.0
+offset_top = 28.0
+offset_right = 1118.7391
+offset_bottom = 112.0
 icon = ExtResource("5_skip_btn")
+expand_icon = true

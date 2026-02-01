@@ -37,7 +37,7 @@
 [ext_resource type="Texture2D" uid="uid://d1hssfwhx0fq4" path="res://assets/production/mouth/mouth_layer.svg" id="35_mouth_layer"]
 [ext_resource type="Texture2D" uid="uid://dflue3pfq7gon" path="res://assets/production/mouth/mouth_lever.svg" id="36_mouth_lever"]
 [ext_resource type="Texture2D" uid="uid://boprq0yggjis5" path="res://assets/production/mouth/mouth_size_chart.svg" id="37_mouth_chart"]
-[ext_resource type="Texture2D" uid="uid://cutrwidjr6ump" path="res://assets/production/mouth/mouth_size_arrow.svg" id="38_mouth_arrow"]
+[ext_resource type="Texture2D" uid="uid://cgcouj268ynlh" path="res://assets/production/mouth/mouth_size_arrow.png" id="38_mouth_arrow"]
 [ext_resource type="Texture2D" uid="uid://bc6q85b2e5bc2" path="res://assets/production/ear/ear_layer.svg" id="39_ear_layer"]
 [ext_resource type="Texture2D" uid="uid://bfkard1gmehn5" path="res://assets/production/ear/ear_direction.svg" id="40_ear_direction"]
 [ext_resource type="Texture2D" uid="uid://cdnnepewp1uxp" path="res://assets/production/ear/ear_direction_picker.svg" id="41_ear_picker"]
@@ -405,10 +405,10 @@ expand_mode = 1
 
 [node name="MouthSizeArrow" type="TextureRect" parent="MouthLayer" unique_id=1694012353]
 layout_mode = 0
-offset_left = 121.0
-offset_top = 257.0
-offset_right = 141.0
-offset_bottom = 277.0
+offset_left = 81.0
+offset_top = 71.0
+offset_right = 99.0
+offset_bottom = 98.69231
 pivot_offset = Vector2(10, 10)
 texture = ExtResource("38_mouth_arrow")
 expand_mode = 1

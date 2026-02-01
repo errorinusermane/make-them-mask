@@ -50,6 +50,7 @@ size_flags_vertical = 3
 icon = ExtResource("3_start_btn")
 flat = true
 mouse_filter = 0
+expand_icon = true
 
 [node name="BookButton" type="Button" parent="ActionButtons"]
 layout_mode = 2
@@ -58,6 +59,7 @@ size_flags_vertical = 3
 icon = ExtResource("4_book_btn")
 flat = true
 mouse_filter = 0
+expand_icon = true
 
 [node name="ExitButton" type="Button" parent="ActionButtons"]
 layout_mode = 2
@@ -66,3 +68,4 @@ size_flags_vertical = 3
 icon = ExtResource("5_exit_btn")
 flat = true
 mouse_filter = 0
+expand_icon = true

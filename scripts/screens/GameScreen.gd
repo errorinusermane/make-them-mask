@@ -140,8 +140,9 @@ var nose_stop_arrow_texture: Texture2D = preload("res://assets/production/nose/n
 
 var mouth_layer_texture: Texture2D = preload("res://assets/production/mouth/mouth_layer.svg")
 var mouth_lever_texture: Texture2D = preload("res://assets/production/mouth/mouth_lever.svg")
+var mouth_lever_up_texture: Texture2D = preload("res://assets/production/mouth/mouth_lever_up.png")
 var mouth_size_chart_texture: Texture2D = preload("res://assets/production/mouth/mouth_size_chart.svg")
-var mouth_size_arrow_texture: Texture2D = preload("res://assets/production/mouth/mouth_size_arrow.svg")
+var mouth_size_arrow_texture: Texture2D = preload("res://assets/production/mouth/mouth_size_arrow.png")
 
 var ear_layer_texture: Texture2D = preload("res://assets/production/ear/ear_layer.svg")
 var ear_direction_texture: Texture2D = preload("res://assets/production/ear/ear_direction.svg")
@@ -414,8 +415,12 @@ func _on_mouth_lever_pressed() -> void:
 	mouth_is_animating = !mouth_is_animating
 	
 	if mouth_is_animating:
+		# 애니메이션 시작 - 레버를 올린 모양으로 변경
+		mouth_lever.icon = mouth_lever_up_texture
 		print("입 크기 애니메이션 시작")
 	else:
+		# 애니메이션 멈쵤 - 원래 레버 모양으로 복귀
+		mouth_lever.icon = mouth_lever_texture
 		var size_names = ["S", "M", "L", "XL", "XXL"]
 		print("입 크기 애니메이션 멈춤: %s (%d)" % [size_names[player_mouth_size], player_mouth_size])
 

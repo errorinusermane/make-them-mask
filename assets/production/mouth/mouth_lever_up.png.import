@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cutrwidjr6ump"
-path="res://.godot/imported/mouth_size_arrow.svg-61af59bf6482599279f5cd32f708b554.ctex"
+uid="uid://c6xw1xfjlk4ox"
+path="res://.godot/imported/mouth_lever_up.png-6b86740969066a632f21cd8cdd3839a8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/production/mouth/mouth_size_arrow.svg"
-dest_files=["res://.godot/imported/mouth_size_arrow.svg-61af59bf6482599279f5cd32f708b554.ctex"]
+source_file="res://assets/production/mouth/mouth_lever_up.png"
+dest_files=["res://.godot/imported/mouth_lever_up.png-6b86740969066a632f21cd8cdd3839a8.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
