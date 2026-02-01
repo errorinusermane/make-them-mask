@@ -3,7 +3,6 @@ extends Control
 signal transition_requested(next_screen_name)
 
 func _ready() -> void:
-	$Background.texture = load("res://assets/screens/game/background_game.svg")
 	$NextButton.icon = load("res://assets/global/button_next.svg")
 	
 	if has_node("NextButton"):

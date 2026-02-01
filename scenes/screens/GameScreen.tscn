@@ -1,8 +1,16 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://dgy8r1fwqqcy"]
 
-[ext_resource type="Script" path="res://scripts/screens/GameScreen.gd" id="1_game"]
+[ext_resource type="Script" uid="uid://durqxgb14peb4" path="res://scripts/screens/GameScreen.gd" id="1_game"]
+[ext_resource type="Texture2D" uid="uid://ch0bigac5y80f" path="res://assets/screens/game/background_game.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://bvf0pygvqxjuf" path="res://assets/production/button_done.svg" id="3_done_btn"]
+[ext_resource type="Texture2D" uid="uid://coyfisd5dhij6" path="res://assets/production/button_okay.svg" id="4_okay_btn"]
+[ext_resource type="Texture2D" uid="uid://cyys8560ghddk" path="res://assets/production/button_reset.svg" id="5_reset_btn"]
+[ext_resource type="Texture2D" uid="uid://b862tprrrq407" path="res://assets/production/preview_head.png" id="6_head_img"]
+[ext_resource type="Texture2D" uid="uid://pxh876gbt006" path="res://assets/production/timer_box.svg" id="7_timer_box"]
+[ext_resource type="Texture2D" uid="uid://cjnbab75mbm0w" path="res://assets/production/timer_layer.svg" id="8_timer_layer"]
+[ext_resource type="Texture2D" uid="uid://bixo3n7og1u8n" path="res://assets/production/preview_layer.png" id="9_preview_layer"]
 
-[node name="GameScreen" type="Control"]
+[node name="GameScreen" type="Control" unique_id=342452374]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,17 +19,90 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_game")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=2062888708]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("2_bg")
 expand_mode = 1
-stretch_mode = 0
 
-[node name="NextButton" type="Button" parent="."]
+[node name="DoneButton" type="Button" parent="." unique_id=1122334455]
+layout_mode = 0
+offset_left = 882.0
+offset_top = 500.0
+offset_right = 1188.0
+offset_bottom = 608.0
+icon = ExtResource("3_done_btn")
+flat = true
+
+[node name="ResetButton" type="Button" parent="." unique_id=1997254458]
+layout_mode = 0
+offset_left = 870.0
+offset_top = 53.0
+offset_right = 1172.0
+offset_bottom = 156.0
+icon = ExtResource("5_reset_btn")
+flat = true
+
+[node name="PreviewLayer" type="TextureRect" parent="." unique_id=1286608618]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 480.0
+offset_top = 61.0
+offset_right = -271.0
+offset_bottom = -23.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_preview_layer")
+expand_mode = 1
+
+[node name="PreviewHead" type="TextureRect" parent="PreviewLayer" unique_id=1356576803]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 35.0
+offset_right = 413.0
+offset_bottom = 451.67426
+texture = ExtResource("6_head_img")
+expand_mode = 1
+
+[node name="OkayButton" type="Button" parent="PreviewLayer" unique_id=1251267905]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 443.0
+offset_right = 362.0
+offset_bottom = 551.0
+icon = ExtResource("4_okay_btn")
+flat = true
+
+[node name="TimerLayer" type="TextureRect" parent="." unique_id=320047891]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 23.0
+offset_top = 50.0
+offset_right = -844.0
+offset_bottom = -539.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_timer_layer")
+expand_mode = 1
+
+[node name="TimerBox" type="TextureRect" parent="TimerLayer" unique_id=427431922]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 10.0
+offset_right = 272.3333
+offset_bottom = 52.0
+texture = ExtResource("7_timer_box")
+expand_mode = 1
+
+[node name="NextButton" type="Button" parent="." unique_id=164939375]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
