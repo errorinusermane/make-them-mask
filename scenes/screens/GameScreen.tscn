@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dgy8r1fwqqcy"]
+[gd_scene load_steps=10 format=3 uid="uid://dgy8r1fwqqcy"]
 
 [ext_resource type="Script" uid="uid://durqxgb14peb4" path="res://scripts/screens/GameScreen.gd" id="1_game"]
 [ext_resource type="Texture2D" uid="uid://ch0bigac5y80f" path="res://assets/screens/game/background_game.png" id="2_bg"]
@@ -52,7 +52,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 480.0
+offset_left = 514.0
 offset_top = 61.0
 offset_right = -271.0
 offset_bottom = -23.0
@@ -63,9 +63,9 @@ expand_mode = 1
 
 [node name="PreviewHead" type="TextureRect" parent="PreviewLayer" unique_id=1356576803]
 layout_mode = 0
-offset_left = 12.0
+offset_left = -8.0
 offset_top = 35.0
-offset_right = 413.0
+offset_right = 393.0
 offset_bottom = 451.67426
 texture = ExtResource("6_head_img")
 expand_mode = 1
@@ -116,3 +116,12 @@ offset_bottom = -40.0
 grow_horizontal = 0
 grow_vertical = 0
 flat = true
+
+[node name="TotalPlayTimer" type="Timer" parent="."]
+wait_time = 300.0
+one_shot = true
+autostart = true
+
+[node name="MaskCreationTimer" type="Timer" parent="."]
+wait_time = 60.0
+one_shot = true
