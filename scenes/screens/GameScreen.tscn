@@ -18,18 +18,26 @@
 [ext_resource type="Texture2D" uid="uid://qw22wfwjlr75" path="res://assets/production/eye/eye_layer.svg" id="16_eye_layer"]
 [ext_resource type="Texture2D" uid="uid://ds5b652f0ra6m" path="res://assets/production/eye/eye_size_slider.png" id="17_eye_slider"]
 [ext_resource type="Texture2D" uid="uid://c37q4opkjs7lf" path="res://assets/production/eye/eye_size_handle.svg" id="18_eye_handle"]
-[ext_resource type="Texture2D" uid="uid://djomixwhsdj2d" path="res://assets/production/eye/eye_shape_cat.png" id="19_shape_cat"]
-[ext_resource type="Texture2D" uid="uid://ci4e6gmt47fcc" path="res://assets/production/eye/eye_shape_dog.png" id="20_shape_dog"]
-[ext_resource type="Texture2D" uid="uid://dq3v624qioysg" path="res://assets/production/eye/eye_shape_rabbit.png" id="21_shape_rabbit"]
-[ext_resource type="Texture2D" uid="uid://d4d7axqcmavm7" path="res://assets/production/eye/eye_color_black.png" id="22_color_black"]
-[ext_resource type="Texture2D" uid="uid://nl2aew3uxi6" path="res://assets/production/eye/eye_color_blue.png" id="23_color_blue"]
-[ext_resource type="Texture2D" uid="uid://c6xjt3v7xjr4n" path="res://assets/production/eye/eye_color_red.png" id="24_color_red"]
-[ext_resource type="Texture2D" uid="uid://ct7cla3if76c1" path="res://assets/production/eye/eye_brow_down.png" id="25_brow_down"]
-[ext_resource type="Texture2D" uid="uid://cxolbop6av11r" path="res://assets/production/eye/eye_brow_flat.png" id="26_brow_flat"]
-[ext_resource type="Texture2D" uid="uid://dsbu0nblsplaa" path="res://assets/production/eye/eye_brow_up.png" id="27_brow_up"]
-[ext_resource type="Texture2D" uid="uid://c817aqymwdyia" path="res://assets/production/eye/eye_lash_in.png" id="28_lash_in"]
-[ext_resource type="Texture2D" uid="uid://boqsjateexi30" path="res://assets/production/eye/eye_lash_no.png" id="29_lash_no"]
-[ext_resource type="Texture2D" uid="uid://wbr04cn6j5u1" path="res://assets/production/eye/eye_lash_out.png" id="30_lash_out"]
+[ext_resource type="Texture2D" uid="uid://bkf46unfuovo2" path="res://assets/production/eye/eye_shape_cat.png" id="19_shape_cat"]
+[ext_resource type="Texture2D" uid="uid://omquy2pw2jow" path="res://assets/production/eye/eye_shape_dog.png" id="20_shape_dog"]
+[ext_resource type="Texture2D" uid="uid://cqpe07da467ww" path="res://assets/production/eye/eye_shape_rabbit.png" id="21_shape_rabbit"]
+[ext_resource type="Texture2D" uid="uid://bntoe84v13ca2" path="res://assets/production/eye/eye_color_black.png" id="22_color_black"]
+[ext_resource type="Texture2D" uid="uid://dt6oodobkdd1b" path="res://assets/production/eye/eye_color_blue.png" id="23_color_blue"]
+[ext_resource type="Texture2D" uid="uid://b6nyb1qbn170l" path="res://assets/production/eye/eye_color_red.png" id="24_color_red"]
+[ext_resource type="Texture2D" uid="uid://butd7p32yf31x" path="res://assets/production/eye/eye_brow_down.png" id="25_brow_down"]
+[ext_resource type="Texture2D" uid="uid://cefhll7mgh1ns" path="res://assets/production/eye/eye_brow_flat.png" id="26_brow_flat"]
+[ext_resource type="Texture2D" uid="uid://dsh4q3b6vq554" path="res://assets/production/eye/eye_brow_up.png" id="27_brow_up"]
+[ext_resource type="Texture2D" uid="uid://d2xxhplsr23wu" path="res://assets/production/eye/eye_lash_in.png" id="28_lash_in"]
+[ext_resource type="Texture2D" uid="uid://df2k67lqtjk6c" path="res://assets/production/eye/eye_lash_no.png" id="29_lash_no"]
+[ext_resource type="Texture2D" uid="uid://bs4s3551lfbdv" path="res://assets/production/eye/eye_lash_out.png" id="30_lash_out"]
+[ext_resource type="Texture2D" uid="uid://cq74r60qcm0b5" path="res://assets/production/nose/nose_layer.svg" id="31_nose_layer"]
+[ext_resource type="Texture2D" uid="uid://bpha2txsoxdxg" path="res://assets/production/nose/nose_slider.png" id="32_nose_slider"]
+[ext_resource type="Texture2D" uid="uid://c23fcdov10g88" path="res://assets/production/nose/nose_stop_button.svg" id="33_nose_stop_btn"]
+[ext_resource type="Texture2D" uid="uid://c3n0hnv4spvg4" path="res://assets/production/nose/nose_stop_arrow.svg" id="34_nose_stop_arrow"]
+[ext_resource type="Texture2D" uid="uid://d1hssfwhx0fq4" path="res://assets/production/mouth/mouth_layer.svg" id="35_mouth_layer"]
+[ext_resource type="Texture2D" uid="uid://dflue3pfq7gon" path="res://assets/production/mouth/mouth_lever.svg" id="36_mouth_lever"]
+[ext_resource type="Texture2D" uid="uid://boprq0yggjis5" path="res://assets/production/mouth/mouth_size_chart.svg" id="37_mouth_chart"]
+[ext_resource type="Texture2D" uid="uid://cutrwidjr6ump" path="res://assets/production/mouth/mouth_size_arrow.svg" id="38_mouth_arrow"]
 
 [node name="GameScreen" type="Control" unique_id=342452374]
 layout_mode = 3
@@ -58,6 +66,7 @@ offset_right = 1188.0
 offset_bottom = 608.0
 icon = ExtResource("3_done_btn")
 flat = true
+expand_icon = true
 
 [node name="ResetButton" type="Button" parent="." unique_id=1997254458]
 layout_mode = 0
@@ -67,6 +76,7 @@ offset_right = 1172.0
 offset_bottom = 156.0
 icon = ExtResource("5_reset_btn")
 flat = true
+expand_icon = true
 
 [node name="SkinLayer" type="TextureRect" parent="." unique_id=1678901234]
 layout_mode = 1
@@ -169,10 +179,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = 769.0
-offset_right = -885.0
-offset_bottom = 310.0
+offset_left = 17.0
+offset_top = 273.0
+offset_right = -848.0
+offset_bottom = -220.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("16_eye_layer")
@@ -180,136 +190,233 @@ expand_mode = 1
 
 [node name="EyeSizeSlider" type="HSlider" parent="EyeLayer" unique_id=1890123457]
 layout_mode = 0
-offset_left = -305.0
-offset_top = 360.0
-offset_right = -5.0
-offset_bottom = 410.0
+offset_left = 31.0
+offset_top = 106.0
+offset_right = 272.0
+offset_bottom = 159.17796
 
 [node name="EyeSizeSliderBackground" type="TextureRect" parent="EyeLayer/EyeSizeSlider" unique_id=1177547162]
 layout_mode = 0
-offset_left = -24.0
+offset_left = 11.0
 offset_top = 12.0
-offset_right = 266.0
-offset_bottom = 42.0
+offset_right = 239.0
+offset_bottom = 35.586212
 texture = ExtResource("17_eye_slider")
 expand_mode = 1
 
 [node name="EyeSizeHandle" type="TextureRect" parent="EyeLayer/EyeSizeSlider" unique_id=969793452]
 layout_mode = 0
-offset_left = -21.0
-offset_top = 8.0
-offset_right = 22.0
-offset_bottom = 51.0
+offset_left = -16.0
+offset_top = 2.0
+offset_right = 27.0
+offset_bottom = 45.0
 texture = ExtResource("18_eye_handle")
 expand_mode = 1
 
 [node name="ShapeCatButton" type="Button" parent="EyeLayer" unique_id=1991234567]
 layout_mode = 0
-offset_left = -345.0
-offset_top = -37.0
-offset_right = -268.0
-offset_bottom = 40.0
+offset_left = 53.0
+offset_top = 54.0
+offset_right = 104.0
+offset_bottom = 105.0
 icon = ExtResource("19_shape_cat")
 flat = true
+expand_icon = true
 
 [node name="ShapeDogButton" type="Button" parent="EyeLayer" unique_id=1927560027]
 layout_mode = 0
-offset_left = -255.0
-offset_top = -37.0
-offset_right = -175.0
-offset_bottom = 43.0
+offset_left = 10.0
+offset_top = 54.0
+offset_right = 60.0
+offset_bottom = 104.0
 icon = ExtResource("20_shape_dog")
 flat = true
+expand_icon = true
 
 [node name="ShapeRabbitButton" type="Button" parent="EyeLayer" unique_id=1018848550]
 layout_mode = 0
-offset_left = -165.0
-offset_top = -37.0
-offset_right = -85.0
-offset_bottom = 43.0
+offset_left = 98.0
+offset_top = 54.0
+offset_right = 148.0
+offset_bottom = 104.0
 icon = ExtResource("21_shape_rabbit")
 flat = true
+expand_icon = true
 
 [node name="ColorBlackButton" type="Button" parent="EyeLayer" unique_id=1889513285]
 layout_mode = 0
-offset_left = -345.0
-offset_top = 63.0
-offset_right = -265.0
-offset_bottom = 143.0
+offset_left = 232.0
+offset_top = 58.0
+offset_right = 283.0
+offset_bottom = 109.0
 icon = ExtResource("22_color_black")
 flat = true
+expand_icon = true
 
 [node name="ColorBlueButton" type="Button" parent="EyeLayer" unique_id=1773806385]
 layout_mode = 0
-offset_left = -255.0
-offset_top = 63.0
-offset_right = -175.0
-offset_bottom = 143.0
+offset_left = 187.0
+offset_top = 57.0
+offset_right = 238.0
+offset_bottom = 108.0
 icon = ExtResource("23_color_blue")
 flat = true
+expand_icon = true
 
 [node name="ColorRedButton" type="Button" parent="EyeLayer" unique_id=1091804099]
 layout_mode = 0
-offset_left = -165.0
-offset_top = 63.0
-offset_right = -85.0
-offset_bottom = 143.0
+offset_left = 142.0
+offset_top = 56.0
+offset_right = 193.0
+offset_bottom = 107.0
 icon = ExtResource("24_color_red")
 flat = true
+expand_icon = true
 
 [node name="BrowDownButton" type="Button" parent="EyeLayer" unique_id=1109906280]
 layout_mode = 0
-offset_left = -345.0
-offset_top = 163.0
-offset_right = -265.0
-offset_bottom = 243.0
+offset_left = 99.0
+offset_top = 9.0
+offset_right = 148.0
+offset_bottom = 58.0
 icon = ExtResource("25_brow_down")
 flat = true
+expand_icon = true
 
 [node name="BrowFlatButton" type="Button" parent="EyeLayer" unique_id=853135377]
 layout_mode = 0
-offset_left = -255.0
-offset_top = 163.0
-offset_right = -175.0
-offset_bottom = 243.0
+offset_left = 55.0
+offset_top = 8.0
+offset_right = 105.0
+offset_bottom = 58.0
 icon = ExtResource("26_brow_flat")
 flat = true
+expand_icon = true
 
 [node name="BrowUpButton" type="Button" parent="EyeLayer" unique_id=1190518501]
 layout_mode = 0
-offset_left = -165.0
-offset_top = 163.0
-offset_right = -85.0
-offset_bottom = 243.0
+offset_left = 11.0
+offset_top = 9.0
+offset_right = 60.0
+offset_bottom = 58.0
 icon = ExtResource("27_brow_up")
 flat = true
+expand_icon = true
 
 [node name="LashInButton" type="Button" parent="EyeLayer" unique_id=1821420172]
 layout_mode = 0
-offset_left = -345.0
-offset_top = 263.0
-offset_right = -265.0
-offset_bottom = 343.0
+offset_left = 188.0
+offset_top = 8.0
+offset_right = 240.0
+offset_bottom = 60.0
 icon = ExtResource("28_lash_in")
 flat = true
+expand_icon = true
 
 [node name="LashNoButton" type="Button" parent="EyeLayer" unique_id=623070544]
 layout_mode = 0
-offset_left = -255.0
-offset_top = 263.0
-offset_right = -175.0
-offset_bottom = 343.0
+offset_left = 235.0
+offset_top = 9.0
+offset_right = 286.0
+offset_bottom = 60.0
 icon = ExtResource("29_lash_no")
 flat = true
+expand_icon = true
 
 [node name="LashOutButton" type="Button" parent="EyeLayer" unique_id=1583728419]
 layout_mode = 0
-offset_left = -165.0
-offset_top = 263.0
-offset_right = -85.0
-offset_bottom = 343.0
+offset_left = 142.0
+offset_top = 8.0
+offset_right = 194.0
+offset_bottom = 60.0
 icon = ExtResource("30_lash_out")
 flat = true
+expand_icon = true
+
+[node name="NoseLayer" type="TextureRect" parent="." unique_id=1688012347]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 316.0
+offset_top = 270.0
+offset_right = -778.0
+offset_bottom = -29.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("31_nose_layer")
+expand_mode = 1
+
+[node name="NoseSlider" type="TextureRect" parent="NoseLayer" unique_id=1689012348]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 10.0
+offset_right = 52.0
+offset_bottom = 295.0
+texture = ExtResource("32_nose_slider")
+expand_mode = 1
+
+[node name="NoseStopArrow" type="TextureRect" parent="NoseLayer" unique_id=1690012349]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 275.0
+offset_right = 57.0
+offset_bottom = 287.0
+texture = ExtResource("34_nose_stop_arrow")
+expand_mode = 1
+
+[node name="NoseStopButton" type="Button" parent="NoseLayer" unique_id=1691012350]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 298.0
+offset_right = 57.471912
+offset_bottom = 346.0
+icon = ExtResource("33_nose_stop_btn")
+flat = true
+expand_icon = true
+
+[node name="MouthLayer" type="TextureRect" parent="." unique_id=1692012351]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 19.0
+offset_top = 443.0
+offset_right = -849.0
+offset_bottom = -38.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("35_mouth_layer")
+expand_mode = 1
+
+[node name="MouthSizeChart" type="TextureRect" parent="MouthLayer" unique_id=1693012352]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 11.0
+offset_right = 158.0
+offset_bottom = 145.0
+texture = ExtResource("37_mouth_chart")
+expand_mode = 1
+
+[node name="MouthSizeArrow" type="TextureRect" parent="MouthLayer" unique_id=1694012353]
+layout_mode = 0
+offset_left = 121.0
+offset_top = 257.0
+offset_right = 141.0
+offset_bottom = 277.0
+pivot_offset = Vector2(10, 10)
+texture = ExtResource("38_mouth_arrow")
+expand_mode = 1
+
+[node name="MouthLever" type="Button" parent="MouthLayer" unique_id=1695012354]
+layout_mode = 0
+offset_left = 175.0
+offset_top = 15.0
+offset_right = 254.0
+offset_bottom = 170.17857
+icon = ExtResource("36_mouth_lever")
+flat = true
+expand_icon = true
 
 [node name="PreviewLayer" type="TextureRect" parent="." unique_id=1286608618]
 layout_mode = 1
@@ -342,6 +449,7 @@ offset_right = 344.0
 offset_bottom = 547.0
 icon = ExtResource("4_okay_btn")
 flat = true
+expand_icon = true
 
 [node name="TimerLayer" type="TextureRect" parent="." unique_id=320047891]
 layout_mode = 1

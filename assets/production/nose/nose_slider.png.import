@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cttnkv1d5obes"
-path="res://.godot/imported/nose_slider.svg-653ee3a33b0454e34ca7d2e174daf406.ctex"
+uid="uid://bpha2txsoxdxg"
+path="res://.godot/imported/nose_slider.png-92d82c916ef1130dfef2506b14bdd1d1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/production/nose/nose_slider.svg"
-dest_files=["res://.godot/imported/nose_slider.svg-653ee3a33b0454e34ca7d2e174daf406.ctex"]
+source_file="res://assets/production/nose/nose_slider.png"
+dest_files=["res://.godot/imported/nose_slider.png-92d82c916ef1130dfef2506b14bdd1d1.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

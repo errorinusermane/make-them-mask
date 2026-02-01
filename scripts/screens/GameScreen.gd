@@ -29,12 +29,27 @@ var player_eye_shape: String = "cat"  # cat, dog, rabbit
 var player_eye_color: String = "black"  # black, blue, red
 var player_eye_brow: String = "flat"  # down, flat, up
 var player_eye_lash: String = "no"  # in, no, out
-var player_eye_size: int = 2  # 0=S, 1=M, 2=L, 3=XL, 4=XXL
+var player_eye_size: int = 0  # 0=S, 1=M, 2=L, 3=XL, 4=XXL
 var target_eye_shape: String = "dog"
 var target_eye_color: String = "blue"
 var target_eye_brow: String = "up"
 var target_eye_lash: String = "out"
 var target_eye_size: int = 3
+
+# Nose 단계 변수
+var player_nose_size: int = 0  # 0=S, 1=M, 2=L, 3=XL, 4=XXL
+var target_nose_size: int = 3
+var nose_is_animating: bool = false  # stop button으로 애니메이션 제어
+var nose_animation_timer: float = 0.0
+var nose_animation_speed: float = 0.1  # 레벨 변경 간격(초)
+
+# Mouth 단계 변수
+var player_mouth_size: int = 2  # 0=S, 1=M, 2=L, 3=XL, 4=XXL
+var target_mouth_size: int = 3
+var mouth_is_animating: bool = false  # lever로 애니메이션 제어
+var mouth_animation_timer: float = 0.0
+var mouth_animation_speed: float = 0.08  # 레벨 변경 간격(초)
+var mouth_direction: int = 1  # 1=오른쪽(증가), -1=왼쪽(감소)
 
 # 노드 참조
 @onready var total_play_timer: Timer = $TotalPlayTimer
@@ -74,6 +89,18 @@ var target_eye_size: int = 3
 @onready var eye_lash_out_btn: Button = $EyeLayer/LashOutButton
 @onready var preview_head: TextureRect = $PreviewLayer/PreviewHead
 
+# NOSE 단계 노드
+@onready var nose_layer: TextureRect = $NoseLayer
+@onready var nose_stop_button: Button = $NoseLayer/NoseStopButton
+@onready var nose_slider: TextureRect = $NoseLayer/NoseSlider
+@onready var nose_stop_arrow: TextureRect = $NoseLayer/NoseStopArrow
+
+# MOUTH 단계 노드
+@onready var mouth_layer: TextureRect = $MouthLayer
+@onready var mouth_lever: Button = $MouthLayer/MouthLever
+@onready var mouth_size_chart: TextureRect = $MouthLayer/MouthSizeChart
+@onready var mouth_size_arrow: TextureRect = $MouthLayer/MouthSizeArrow
+
 # 텍스처 리소스
 var skin_handle_texture: Texture2D = preload("res://assets/production/skin/skin_handle.svg")
 
@@ -90,6 +117,16 @@ var eye_lash_in: Texture2D = preload("res://assets/production/eye/eye_lash_in.pn
 var eye_lash_no: Texture2D = preload("res://assets/production/eye/eye_lash_no.png")
 var eye_lash_out: Texture2D = preload("res://assets/production/eye/eye_lash_out.png")
 var eye_size_handle_texture: Texture2D = preload("res://assets/production/eye/eye_size_handle.svg")
+
+var nose_layer_texture: Texture2D = preload("res://assets/production/nose/nose_layer.svg")
+var nose_slider_texture: Texture2D = preload("res://assets/production/nose/nose_slider.png")
+var nose_stop_button_texture: Texture2D = preload("res://assets/production/nose/nose_stop_button.svg")
+var nose_stop_arrow_texture: Texture2D = preload("res://assets/production/nose/nose_stop_arrow.svg")
+
+var mouth_layer_texture: Texture2D = preload("res://assets/production/mouth/mouth_layer.svg")
+var mouth_lever_texture: Texture2D = preload("res://assets/production/mouth/mouth_lever.svg")
+var mouth_size_chart_texture: Texture2D = preload("res://assets/production/mouth/mouth_size_chart.svg")
+var mouth_size_arrow_texture: Texture2D = preload("res://assets/production/mouth/mouth_size_arrow.svg")
 
 func _ready() -> void:
 	# 타이머 시작
@@ -154,9 +191,17 @@ func _ready() -> void:
 	eye_lash_no_btn.icon = eye_lash_no
 	eye_lash_out_btn.icon = eye_lash_out
 	
+	# NOSE 버튼 시그널 연결
+	nose_stop_button.pressed.connect(_on_nose_stop_button_pressed)
+	
+	# MOUTH 버튼 시그널 연결
+	mouth_lever.pressed.connect(_on_mouth_lever_pressed)
+	
 	# 초기화
 	_initialize_skin_ui()
 	_initialize_eye_ui()
+	_initialize_nose_ui()
+	_initialize_mouth_ui()
 	_update_ui_for_step()
 
 
@@ -202,6 +247,124 @@ func _initialize_eye_ui() -> void:
 	# 초기 핸들 위치 업데이트
 	_update_handle_position(eye_size_slider, eye_size_handle)
 
+func _initialize_nose_ui() -> void:
+	# 초기값 설정
+	player_nose_size = 0  # 가장 밑(S)
+	nose_is_animating = false
+	nose_animation_timer = 0.0
+	
+	# 슬라이더 초기 위치 업데이트
+	_update_nose_slider_position()
+
+func _initialize_mouth_ui() -> void:
+	# 초기값 설정
+	player_mouth_size = 2  # L (중간)
+	mouth_is_animating = false
+	mouth_animation_timer = 0.0
+	mouth_direction = 1  # 오른쪽으로 시작
+	
+	# 화살표 초기 위치 업데이트
+	_update_mouth_arrow_position()
+
+func _process(delta: float) -> void:
+	if current_step == Step.NOSE and nose_is_animating:
+		nose_animation_timer += delta
+		
+		if nose_animation_timer >= nose_animation_speed:
+			nose_animation_timer = 0.0
+			
+			# 레벨 증가: S(0) -> M(1) -> L(2) -> XL(3) -> XXL(4) -> S(0) 루프
+			player_nose_size += 1
+			if player_nose_size > 4:
+				player_nose_size = 0
+			
+			_update_nose_slider_position()
+			
+			var size_names = ["S", "M", "L", "XL", "XXL"]
+			print("코 크기 변경: %s (%d)" % [size_names[player_nose_size], player_nose_size])
+	
+	if current_step == Step.MOUTH and mouth_is_animating:
+		mouth_animation_timer += delta
+		
+		if mouth_animation_timer >= mouth_animation_speed:
+			mouth_animation_timer = 0.0
+			
+			# 방향에 따라 증가/감소: S(0) ↔ M(1) ↔ L(2) ↔ XL(3) ↔ XXL(4)
+			player_mouth_size += mouth_direction
+			
+			# 경계에 도달하면 방향 반전
+			if player_mouth_size >= 4:
+				player_mouth_size = 4
+				mouth_direction = -1  # 왼쪽으로
+			elif player_mouth_size <= 0:
+				player_mouth_size = 0
+				mouth_direction = 1  # 오른쪽으로
+			
+			_update_mouth_arrow_position()
+			
+			var size_names = ["S", "M", "L", "XL", "XXL"]
+			print("입 크기 변경: %s (%d)" % [size_names[player_mouth_size], player_mouth_size])
+
+func _update_nose_slider_position() -> void:
+	if not nose_slider or not nose_stop_arrow:
+		return
+	
+	# 세로 슬라이더: 5단계 (S=0 -> XXL=4)
+	# 슬라이더 배경의 높이를 기준으로 5단계로 나눔
+	# 아래(S)에서 위(XXL)로 이동
+	var slider_height = nose_slider.size.y
+	var arrow_height = nose_stop_arrow.size.y
+	
+	# 5단계로 나누기 (0~4)
+	var step_height = slider_height / 5.0
+	
+	# player_nose_size: 0(S)=아래, 4(XXL)=위
+	# Y 위치는 위가 작고 아래가 큼
+	var y_position = slider_height - (player_nose_size + 0.5) * step_height - arrow_height / 2.0
+	
+	nose_stop_arrow.position.y = y_position
+
+func _update_mouth_arrow_position() -> void:
+	if not mouth_size_chart or not mouth_size_arrow:
+		return
+	
+	# 차트는 5개 구역으로 나뉨 (S, M, L, XL, XXL)
+	# 화살표는 회전하면서 각 구역을 가리킴
+	# 0(S) = -72도, 1(M) = -36도, 2(L) = 0도, 3(XL) = 36도, 4(XXL) = 72도
+	var angle_step = 36.0  # 각 단계마다 36도
+	var base_angle = -72.0  # S의 시작 각도
+	var target_angle = base_angle + (player_mouth_size * angle_step)
+	
+	# 화살표 회전 (deg_to_rad 사용)
+	mouth_size_arrow.rotation = deg_to_rad(target_angle)
+
+func _on_nose_stop_button_pressed() -> void:
+	if current_step != Step.NOSE:
+		return
+	
+	# 첫 번째 클릭: 애니메이션 시작
+	# 두 번째 클릭: 애니메이션 멈춤
+	nose_is_animating = !nose_is_animating
+	
+	if nose_is_animating:
+		print("코 크기 애니메이션 시작")
+	else:
+		var size_names = ["S", "M", "L", "XL", "XXL"]
+		print("코 크기 애니메이션 멈춤: %s (%d)" % [size_names[player_nose_size], player_nose_size])
+
+func _on_mouth_lever_pressed() -> void:
+	if current_step != Step.MOUTH:
+		return
+	
+	# 토글: 애니메이션 시작/멈춤
+	mouth_is_animating = !mouth_is_animating
+	
+	if mouth_is_animating:
+		print("입 크기 애니메이션 시작")
+	else:
+		var size_names = ["S", "M", "L", "XL", "XXL"]
+		print("입 크기 애니메이션 멈춤: %s (%d)" % [size_names[player_mouth_size], player_mouth_size])
+
 func _update_ui_for_step() -> void:
 	done_button.visible = false  # Done 버튼은 사용하지 않음
 	okay_button.disabled = (current_step == Step.COMPLETED)
@@ -232,6 +395,26 @@ func _update_ui_for_step() -> void:
 		eye_lash_in_btn.disabled = false
 		eye_lash_no_btn.disabled = false
 		eye_lash_out_btn.disabled = false
+	
+	# NOSE 단계
+	var is_nose_step = (current_step == Step.NOSE)
+	if nose_layer:
+		nose_layer.visible = is_nose_step
+	if is_nose_step:
+		nose_stop_button.disabled = false
+	else:
+		# NOSE 단계가 아니면 애니메이션 중지
+		nose_is_animating = false
+	
+	# MOUTH 단계
+	var is_mouth_step = (current_step == Step.MOUTH)
+	if mouth_layer:
+		mouth_layer.visible = is_mouth_step
+	if is_mouth_step:
+		mouth_lever.disabled = false
+	else:
+		# MOUTH 단계가 아니면 애니메이션 중지
+		mouth_is_animating = false
 	
 	# COMPLETED 단계면 Result 씬으로 전환
 	if current_step == Step.COMPLETED:
@@ -422,14 +605,54 @@ func _on_okay_button_pressed() -> void:
 		_update_ui_for_step()
 	
 	elif current_step == Step.NOSE:
-		# TODO: NOSE 커스터마이징 값 저장 및 점수 계산
-		print("코 단계 완료 - 다음 단계로 진행")
+		# 애니메이션 중지
+		nose_is_animating = false
+		
+		# 점수 계산
+		var nose_score = 0
+		if player_nose_size == target_nose_size:
+			nose_score = 100
+		else:
+			# 거리에 따라 점수 차감
+			var distance = abs(player_nose_size - target_nose_size)
+			nose_score = max(0, 100 - distance * 25)
+		
+		# 최종 값 저장
+		mask_data["nose_size"] = player_nose_size
+		mask_data["nose_score"] = nose_score
+		payout += nose_score
+		
+		var size_names = ["S", "M", "L", "XL", "XXL"]
+		print("코 저장: 크기=%s | 점수: %d | 총점: %d" % [
+			size_names[player_nose_size], nose_score, payout
+		])
+		
 		current_step = Step.MOUTH
 		_update_ui_for_step()
 	
 	elif current_step == Step.MOUTH:
-		# TODO: MOUTH 커스터마이징 값 저장 및 점수 계산
-		print("입 단계 완료 - 다음 단계로 진행")
+		# 애니메이션 중지
+		mouth_is_animating = false
+		
+		# 점수 계산
+		var mouth_score = 0
+		if player_mouth_size == target_mouth_size:
+			mouth_score = 100
+		else:
+			# 거리에 따라 점수 차감
+			var distance = abs(player_mouth_size - target_mouth_size)
+			mouth_score = max(0, 100 - distance * 25)
+		
+		# 최종 값 저장
+		mask_data["mouth_size"] = player_mouth_size
+		mask_data["mouth_score"] = mouth_score
+		payout += mouth_score
+		
+		var size_names = ["S", "M", "L", "XL", "XXL"]
+		print("입 저장: 크기=%s | 점수: %d | 총점: %d" % [
+			size_names[player_mouth_size], mouth_score, payout
+		])
+		
 		current_step = Step.EAR
 		_update_ui_for_step()
 	
@@ -467,10 +690,23 @@ func _on_reset_button_pressed() -> void:
 	player_eye_size = 2
 	eye_size_handle.visible = true
 	
+	# NOSE 리셋
+	player_nose_size = 0
+	nose_is_animating = false
+	nose_animation_timer = 0.0
+	
+	# MOUTH 리셋
+	player_mouth_size = 2
+	mouth_is_animating = false
+	mouth_animation_timer = 0.0
+	mouth_direction = 1
+	
 	mask_creation_timer.stop()
 	mask_creation_timer.start()
 	_initialize_skin_ui()
 	_initialize_eye_ui()
+	_initialize_nose_ui()
+	_initialize_mouth_ui()
 	_update_ui_for_step()
 	print("총점 리셋: %d" % payout)
 
@@ -500,9 +736,22 @@ func _on_mask_creation_timer_timeout() -> void:
 	player_eye_size = 2
 	eye_size_handle.visible = true
 	
+	# NOSE 리셋
+	player_nose_size = 0
+	nose_is_animating = false
+	nose_animation_timer = 0.0
+	
+	# MOUTH 리셋
+	player_mouth_size = 2
+	mouth_is_animating = false
+	mouth_animation_timer = 0.0
+	mouth_direction = 1
+	
 	mask_creation_timer.start()
 	_initialize_skin_ui()
 	_initialize_eye_ui()
+	_initialize_nose_ui()
+	_initialize_mouth_ui()
 	_update_ui_for_step()
 
 func _unhandled_input(event: InputEvent) -> void:
