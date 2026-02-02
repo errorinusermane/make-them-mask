@@ -114,6 +114,18 @@ var hair_okay_pressed: bool = false  # HAIR 단계에서 okay를 눌렀는지 �
 @onready var preview_eye_brow: TextureRect = $PreviewLayer/PreviewHead/EyeBrow
 @onready var preview_eye_lash: TextureRect = $PreviewLayer/PreviewHead/EyeLash
 
+# PreviewHead 내부 코 요소 노드
+@onready var preview_nose: TextureRect = $PreviewLayer/PreviewHead/Nose
+
+# PreviewHead 내부 입 요소 노드
+@onready var preview_mouth: TextureRect = $PreviewLayer/PreviewHead/Mouth
+
+# PreviewHead 내부 귀 요소 노드
+@onready var preview_ear: TextureRect = $PreviewLayer/PreviewHead/Ear
+
+# PreviewHead 내부 머리 요소 노드
+@onready var preview_hair: TextureRect = $PreviewLayer/PreviewHead/Hair
+
 # NOSE 단계 노드
 @onready var nose_layer: TextureRect = $NoseLayer
 @onready var nose_stop_button: Button = $NoseLayer/NoseStopButton
@@ -165,6 +177,38 @@ var output_eye_brow_flat: Texture2D = preload("res://assets/output/eye/eye_brow_
 var output_eye_brow_up: Texture2D = preload("res://assets/output/eye/eye_brow_up.png")
 var output_eye_lash_in: Texture2D = preload("res://assets/output/eye/eye_lash_in.png")
 var output_eye_lash_out: Texture2D = preload("res://assets/output/eye/eye_lash_out.png")
+
+# Output 코 리소스 (실제 PreviewHead에 표시될 이미지)
+var output_nose_S: Texture2D = preload("res://assets/output/nose/nose_S.png")
+var output_nose_M: Texture2D = preload("res://assets/output/nose/nose_M.png")
+var output_nose_L: Texture2D = preload("res://assets/output/nose/nose_L.png")
+var output_nose_XL: Texture2D = preload("res://assets/output/nose/nose_XL.png")
+var output_nose_XXL: Texture2D = preload("res://assets/output/nose/nose_XXL.png")
+
+# Output 입 리소스 (실제 PreviewHead에 표시될 이미지)
+var output_mouth_S: Texture2D = preload("res://assets/output/mouth/mouth_S.png")
+var output_mouth_M: Texture2D = preload("res://assets/output/mouth/mouth_M.png")
+var output_mouth_L: Texture2D = preload("res://assets/output/mouth/mouth_L.png")
+var output_mouth_XL: Texture2D = preload("res://assets/output/mouth/mouth_XL.png")
+var output_mouth_XXL: Texture2D = preload("res://assets/output/mouth/mouth_XXL.png")
+
+# Output 귀 리소스 (실제 PreviewHead에 표시될 이미지)
+var output_ear_top_S: Texture2D = preload("res://assets/output/ear/ear_top_S.png")
+var output_ear_top_M: Texture2D = preload("res://assets/output/ear/ear_top_M.png")
+var output_ear_top_L: Texture2D = preload("res://assets/output/ear/ear_top_L.png")
+var output_ear_top_XL: Texture2D = preload("res://assets/output/ear/ear_top_XL.png")
+var output_ear_top_XXL: Texture2D = preload("res://assets/output/ear/ear_top_XXL.png")
+var output_ear_middle_S: Texture2D = preload("res://assets/output/ear/ear_middle_S.png")
+var output_ear_middle_M: Texture2D = preload("res://assets/output/ear/ear_middle_M.png")
+var output_ear_middle_L: Texture2D = preload("res://assets/output/ear/ear_middle_L.png")
+var output_ear_middle_XL: Texture2D = preload("res://assets/output/ear/ear_middle_XL.png")
+var output_ear_middle_XXL: Texture2D = preload("res://assets/output/ear/ear_middle_XXL.png")
+var output_ear_bottom_S: Texture2D = preload("res://assets/output/ear/ear_bottom_S.png")
+var output_ear_bottom_XL: Texture2D = preload("res://assets/output/ear/ear_bottom_XL.png")
+var output_ear_bottom_XXL: Texture2D = preload("res://assets/output/ear/ear_bottom_XXL.png")
+
+# Output 머리 리소스 (실제 PreviewHead에 표시될 이미지)
+var output_hair_curly: Texture2D = preload("res://assets/output/hair/hair_curly.png")
 
 # Production 눈 리소스 (UI 버튼용)
 var eye_shape_cat: Texture2D = preload("res://assets/production/eye/eye_shape_cat.png")
@@ -887,6 +931,94 @@ func _apply_eye_to_preview() -> void:
 		player_eye_shape, player_eye_color, player_eye_brow, player_eye_lash, player_eye_size
 	])
 
+func _apply_nose_to_preview() -> void:
+	if preview_nose:
+		match player_nose_size:
+			0:  # S
+				preview_nose.texture = output_nose_S
+			1:  # M
+				preview_nose.texture = output_nose_M
+			2:  # L
+				preview_nose.texture = output_nose_L
+			3:  # XL
+				preview_nose.texture = output_nose_XL
+			4:  # XXL
+				preview_nose.texture = output_nose_XXL
+		preview_nose.visible = true
+	
+	var size_names = ["S", "M", "L", "XL", "XXL"]
+	print("PreviewHead에 코 적용 완료: size=%s" % size_names[player_nose_size])
+
+func _apply_mouth_to_preview() -> void:
+	if preview_mouth:
+		match player_mouth_size:
+			0:  # S
+				preview_mouth.texture = output_mouth_S
+			1:  # M
+				preview_mouth.texture = output_mouth_M
+			2:  # L
+				preview_mouth.texture = output_mouth_L
+			3:  # XL
+				preview_mouth.texture = output_mouth_XL
+			4:  # XXL
+				preview_mouth.texture = output_mouth_XXL
+		preview_mouth.visible = true
+	
+	var size_names = ["S", "M", "L", "XL", "XXL"]
+	print("PreviewHead에 입 적용 완료: size=%s" % size_names[player_mouth_size])
+
+func _apply_ear_to_preview() -> void:
+	if preview_ear and player_ear_position != "":
+		var texture: Texture2D = null
+		
+		# position과 size 조합으로 텍스처 선택
+		match player_ear_position:
+			"top":
+				match player_ear_size:
+					0: texture = output_ear_top_S
+					1: texture = output_ear_top_M
+					2: texture = output_ear_top_L
+					3: texture = output_ear_top_XL
+					4: texture = output_ear_top_XXL
+			"middle":
+				match player_ear_size:
+					0: texture = output_ear_middle_S
+					1: texture = output_ear_middle_M
+					2: texture = output_ear_middle_L
+					3: texture = output_ear_middle_XL
+					4: texture = output_ear_middle_XXL
+			"bottom":
+				match player_ear_size:
+					0: texture = output_ear_bottom_S
+					3: texture = output_ear_bottom_XL
+					4: texture = output_ear_bottom_XXL
+		
+		if texture:
+			preview_ear.texture = texture
+			preview_ear.visible = true
+		
+		var size_names = ["S", "M", "L", "XL", "XXL"]
+		var position_names = {"top": "엘프귀", "middle": "일반", "bottom": "부처님 귀"}
+		print("PreviewHead에 귀 적용 완료: position=%s size=%s" % [
+			position_names[player_ear_position],
+			size_names[player_ear_size]
+		])
+
+func _apply_hair_to_preview() -> void:
+	if preview_hair:
+		# 머리 텍스처 적용
+		preview_hair.texture = output_hair_curly
+		
+		# RGB 색상 적용 (modulate를 사용하여 머리카락 변경)
+		var hair_color = Color(player_hair_r / 255.0, player_hair_g / 255.0, player_hair_b / 255.0, 1.0)
+		preview_hair.modulate = hair_color
+		
+		preview_hair.visible = true
+		
+		print("PreviewHead에 머리 적용 완료: RGB(%d,%d,%d) option=%d" % [
+			player_hair_r, player_hair_g, player_hair_b, player_hair_option
+		])
+
 # === EYE 단계 함수 ===
 
 func _on_eye_shape_changed(shape: String) -> void:
@@ -1041,6 +1173,9 @@ func _on_okay_button_pressed() -> void:
 			size_names[player_nose_size], nose_score, payout
 		])
 		
+		# PreviewHead에 코 적용
+		_apply_nose_to_preview()
+		
 		current_step = Step.MOUTH
 		_update_ui_for_step()
 	
@@ -1066,6 +1201,9 @@ func _on_okay_button_pressed() -> void:
 		print("입 저장: 크기=%s | 점수: %d | 총점: %d" % [
 			size_names[player_mouth_size], mouth_score, payout
 		])
+		
+		# PreviewHead에 입 적용
+		_apply_mouth_to_preview()
 		
 		current_step = Step.EAR
 		_update_ui_for_step()
@@ -1103,6 +1241,9 @@ func _on_okay_button_pressed() -> void:
 			ear_score, payout
 		])
 		
+		# PreviewHead에 귀 적용
+		_apply_ear_to_preview()
+		
 		current_step = Step.HAIR
 		_update_ui_for_step()
 	
@@ -1133,6 +1274,9 @@ func _on_okay_button_pressed() -> void:
 			player_hair_r, player_hair_g, player_hair_b, 
 			player_hair_option, hair_score, payout
 		])
+		
+		# PreviewHead에 머리 적용
+		_apply_hair_to_preview()
 		
 		# okay를 눌렀음을 표시
 		hair_okay_pressed = true

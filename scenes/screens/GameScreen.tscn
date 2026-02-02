@@ -656,6 +656,46 @@ grow_vertical = 2
 expand_mode = 1
 stretch_mode = 5
 
+[node name="Nose" type="TextureRect" parent="PreviewLayer/PreviewHead"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Mouth" type="TextureRect" parent="PreviewLayer/PreviewHead"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Ear" type="TextureRect" parent="PreviewLayer/PreviewHead"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Hair" type="TextureRect" parent="PreviewLayer/PreviewHead"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
 [node name="OkayButton" type="Button" parent="PreviewLayer" unique_id=1251267905]
 layout_mode = 0
 offset_left = 86.0
