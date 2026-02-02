@@ -57,6 +57,16 @@ var player_ear_size: int = 0  # 0=S, 1=M, 2=L, 3=XL, 4=XXL
 var target_ear_position: String = "top"  # 상 (엘프귀)
 var target_ear_size: int = 0  # S
 
+# Hair 단계 변수
+var player_hair_r: int = 0  # 0~255
+var player_hair_g: int = 0  # 0~255
+var player_hair_b: int = 0  # 0~255
+var player_hair_option: int = 1  # 1 or 2
+var target_hair_r: int = 100  # 예시 타겟 색상
+var target_hair_g: int = 50
+var target_hair_b: int = 30
+var target_hair_option: int = 2  # 예시 타겟 옵션
+
 # 노드 참조
 @onready var total_play_timer: Timer = $TotalPlayTimer
 @onready var mask_creation_timer: Timer = $MaskCreationTimer
@@ -117,6 +127,16 @@ var target_ear_size: int = 0  # S
 @onready var ear_slider: VSlider = $EarLayer/EarSlider
 @onready var ear_handle: TextureRect = $EarLayer/EarSlider/EarHandle
 
+# HAIR 단계 노드
+@onready var hair_layer: TextureRect = $HairLayer
+@onready var hair_color_index: TextureRect = $HairLayer/HairColorIndex
+@onready var hair_color_preview: TextureRect = $HairLayer/HairColorPreview
+@onready var hair_option_layer: TextureRect = $HairLayer/HairOptionLayer
+@onready var hair_option_1: TextureRect = $HairLayer/HairOption1
+@onready var hair_option_2: TextureRect = $HairLayer/HairOption2
+@onready var hair_option_button_left: Button = $HairLayer/HairOptionButtonLeft
+@onready var hair_option_button_right: Button = $HairLayer/HairOptionButtonRight
+
 # ORDER 단계 노드
 @onready var order_layer: TextureRect = $OrderLayer
 @onready var order_form: TextureRect = $OrderLayer/OrderForm
@@ -155,6 +175,16 @@ var ear_direction_texture: Texture2D = preload("res://assets/production/ear/ear_
 var ear_direction_picker_texture: Texture2D = preload("res://assets/production/ear/ear_direction_picker.svg")
 var ear_slider_texture: Texture2D = preload("res://assets/production/ear/ear_slider.png")
 var ear_handle_texture: Texture2D = preload("res://assets/production/ear/ear_handle.svg")
+
+# Hair 리소스
+var hair_layer_texture: Texture2D = preload("res://assets/production/hair/hair_layer.png")
+var hair_color_index_texture: Texture2D = preload("res://assets/production/hair/hair_color_index.png")
+var hair_color_preview_texture: Texture2D = preload("res://assets/production/hair/hair_color_preview.png")
+var hair_option_layer_texture: Texture2D = preload("res://assets/production/hair/hair_option_layer.png")
+var hair_option_1_texture: Texture2D = preload("res://assets/production/hair/hair_option_1.png")
+var hair_option_2_texture: Texture2D = preload("res://assets/production/hair/hair_option_2.png")
+var hair_option_button_left_texture: Texture2D = preload("res://assets/production/hair/hair_option_button_left.png")
+var hair_option_button_right_texture: Texture2D = preload("res://assets/production/hair/hair_option_button_right.png")
 
 # Order 리소스
 var order_layer_texture: Texture2D = preload("res://assets/production/order/order_layer.png")
@@ -210,6 +240,8 @@ func _ready() -> void:
 		mouth_layer.z_index = 0
 	if ear_layer:
 		ear_layer.z_index = 0
+	if hair_layer:
+		hair_layer.z_index = 0
 	
 	# 타이머 시작
 	total_play_timer.start()
@@ -289,12 +321,21 @@ func _ready() -> void:
 	# 핸들 텍스처 설정
 	ear_handle.texture = ear_handle_texture
 	
+	# HAIR 버튼 시그널 연결
+	hair_option_button_left.pressed.connect(_on_hair_option_button_left_pressed)
+	hair_option_button_right.pressed.connect(_on_hair_option_button_right_pressed)
+	
+	# HAIR color index 클릭 이벤트 처리를 위한 설정
+	if hair_color_index:
+		hair_color_index.gui_input.connect(_on_hair_color_index_gui_input)
+	
 	# 초기화
 	_initialize_skin_ui()
 	_initialize_eye_ui()
 	_initialize_nose_ui()
 	_initialize_mouth_ui()
 	_initialize_ear_ui()
+	_initialize_hair_ui()
 	_update_ui_for_step()
 
 
@@ -380,6 +421,20 @@ func _initialize_ear_ui() -> void:
 	
 	# 초기 핸들 위치 업데이트
 	_update_ear_handle_position()
+
+func _initialize_hair_ui() -> void:
+	# 초기값 설정
+	player_hair_option = 1  # 초기값은 1
+	player_hair_r = 0
+	player_hair_g = 0
+	player_hair_b = 0
+	
+	# hair_option 표시 업데이트
+	_update_hair_option_visibility()
+	
+	# hair_color_preview 초기 색상 설정
+	if hair_color_preview:
+		hair_color_preview.modulate = Color(0, 0, 0, 1)
 
 func _process(delta: float) -> void:
 	if current_step == Step.NOSE and nose_is_animating:
@@ -554,12 +609,10 @@ func _update_ui_for_step() -> void:
 		preview_head.modulate.a = 1.0  # 알파값은 1로 유지 (완전 불투명)
 	
 	# HAIR 단계일 때만 DONE 버튼 활성화, 나머지는 OKAY 버튼 활성화
-	var is_hair_step = (current_step == Step.HAIR)
-	
 	done_button.visible = true
 	okay_button.visible = true
 	
-	if is_hair_step:
+	if current_step == Step.HAIR:
 		# HAIR 단계: DONE 활성화, OKAY 비활성화 (회색)
 		done_button.disabled = false
 		done_button.modulate = Color(1, 1, 1, 1)  # 정상 색상
@@ -656,6 +709,18 @@ func _update_ui_for_step() -> void:
 		else:
 			ear_layer.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색 반투명
 			ear_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	# HAIR 단계
+	if hair_layer:
+		hair_layer.visible = true
+		if current_step == Step.HAIR:
+			hair_layer.modulate = Color(1, 1, 1, 1)  # 정상 색상
+			hair_layer.mouse_filter = Control.MOUSE_FILTER_STOP
+			hair_option_button_left.disabled = false
+			hair_option_button_right.disabled = false
+		else:
+			hair_layer.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색 반투명
+			hair_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# COMPLETED 단계면 Result 씬으로 전환
 	if current_step == Step.COMPLETED:
@@ -787,7 +852,32 @@ func _on_done_button_pressed() -> void:
 	_play_sound(sound_button_done)
 	# HAIR 단계에서만 DONE 버튼 작동
 	if current_step == Step.HAIR:
-		# TODO: HAIR 커스터마이징 값 저장 및 점수 계산
+		# 점수 계산
+		var hair_score = 0
+		
+		# 색상 점수 (RGB 거리로 계산, 50점)
+		var color_distance = _calculate_rgb_distance(player_hair_r, player_hair_g, player_hair_b, 
+			target_hair_r, target_hair_g, target_hair_b)
+		var color_score = max(0, 50 - color_distance / 10.0)  # 거리에 따라 점수 차감
+		hair_score += color_score
+		
+		# 옵션 점수 (50점)
+		if player_hair_option == target_hair_option:
+			hair_score += 50
+		
+		# 최종 값 저장
+		mask_data["hair_r"] = player_hair_r
+		mask_data["hair_g"] = player_hair_g
+		mask_data["hair_b"] = player_hair_b
+		mask_data["hair_option"] = player_hair_option
+		mask_data["hair_score"] = hair_score
+		payout += hair_score
+		
+		print("머리 저장: RGB(%d,%d,%d) 옵션=%d | 점수: %d | 총점: %d" % [
+			player_hair_r, player_hair_g, player_hair_b, 
+			player_hair_option, hair_score, payout
+		])
+		
 		print("머리 단계 완료 - 모든 커스터마이징 완료!")
 		current_step = Step.COMPLETED
 		_update_ui_for_step()
@@ -988,6 +1078,12 @@ func _on_reset_button_pressed() -> void:
 	player_ear_position = ""
 	player_ear_size = 0
 	
+	# HAIR 리셋
+	player_hair_option = 1
+	player_hair_r = 0
+	player_hair_g = 0
+	player_hair_b = 0
+	
 	mask_creation_timer.stop()
 	mask_creation_timer.start()
 	_initialize_skin_ui()
@@ -995,6 +1091,7 @@ func _on_reset_button_pressed() -> void:
 	_initialize_nose_ui()
 	_initialize_mouth_ui()
 	_initialize_ear_ui()
+	_initialize_hair_ui()
 	_update_ui_for_step()
 	print("총점 리셋: %d" % payout)
 
@@ -1039,12 +1136,19 @@ func _on_mask_creation_timer_timeout() -> void:
 	player_ear_position = ""
 	player_ear_size = 0
 	
+	# HAIR 리셋
+	player_hair_option = 1
+	player_hair_r = 0
+	player_hair_g = 0
+	player_hair_b = 0
+	
 	mask_creation_timer.start()
 	_initialize_skin_ui()
 	_initialize_eye_ui()
 	_initialize_nose_ui()
 	_initialize_mouth_ui()
 	_initialize_ear_ui()
+	_initialize_hair_ui()
 	_update_ui_for_step()
 
 func _play_sound(sound: AudioStream) -> void:
@@ -1055,3 +1159,67 @@ func _play_sound(sound: AudioStream) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		transition_requested.emit("result")
+
+# === HAIR 단계 함수 ===
+
+func _on_hair_option_button_left_pressed() -> void:
+	if current_step != Step.HAIR:
+		return
+	
+	# 2에서 1로
+	if player_hair_option == 2:
+		player_hair_option = 1
+		_update_hair_option_visibility()
+		print("머리 옵션 변경: %d" % player_hair_option)
+
+func _on_hair_option_button_right_pressed() -> void:
+	if current_step != Step.HAIR:
+		return
+	
+	# 1에서 2로
+	if player_hair_option == 1:
+		player_hair_option = 2
+		_update_hair_option_visibility()
+		print("머리 옵션 변경: %d" % player_hair_option)
+
+func _update_hair_option_visibility() -> void:
+	if not hair_option_1 or not hair_option_2:
+		return
+	
+	# player_hair_option에 따라 하나만 표시
+	hair_option_1.visible = (player_hair_option == 1)
+	hair_option_2.visible = (player_hair_option == 2)
+
+func _on_hair_color_index_gui_input(event: InputEvent) -> void:
+	if current_step != Step.HAIR:
+		return
+	
+	if event is InputEventMouseButton:
+		var mouse_event = event as InputEventMouseButton
+		if mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_LEFT:
+			# hair_color_index 내에서의 상대 위치 계산
+			var local_pos = hair_color_index.get_local_mouse_position()
+			
+			# 이미지 크기 기준으로 정규화 (0~1 범위)
+			var texture_size = hair_color_index.texture.get_size()
+			var normalized_x = clamp(local_pos.x / hair_color_index.size.x, 0.0, 1.0)
+			var normalized_y = clamp(local_pos.y / hair_color_index.size.y, 0.0, 1.0)
+			
+			# 텍스처에서 실제 픽셀 위치 계산
+			var pixel_x = int(normalized_x * texture_size.x)
+			var pixel_y = int(normalized_y * texture_size.y)
+			
+			# 텍스처에서 색상 가져오기
+			var image = hair_color_index.texture.get_image()
+			var color = image.get_pixel(pixel_x, pixel_y)
+			
+			# RGB 값 저장 (0~255 범위로 변환)
+			player_hair_r = int(color.r * 255)
+			player_hair_g = int(color.g * 255)
+			player_hair_b = int(color.b * 255)
+			
+			# hair_color_preview 색상 업데이트
+			if hair_color_preview:
+				hair_color_preview.modulate = color
+			
+			print("머리 색상 변경: R=%d G=%d B=%d" % [player_hair_r, player_hair_g, player_hair_b])
