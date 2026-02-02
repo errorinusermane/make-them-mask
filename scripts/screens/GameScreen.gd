@@ -66,6 +66,7 @@ var target_hair_r: int = 100  # 예시 타겟 색상
 var target_hair_g: int = 50
 var target_hair_b: int = 30
 var target_hair_option: int = 2  # 예시 타겟 옵션
+var hair_okay_pressed: bool = false  # HAIR 단계에서 okay를 눌렀는지 여부
 
 # 노드 참조
 @onready var total_play_timer: Timer = $TotalPlayTimer
@@ -83,6 +84,7 @@ var target_hair_option: int = 2  # 예시 타겟 옵션
 @onready var red_handle: TextureRect = $SkinLayer/RedSlider/RedHandle
 @onready var green_handle: TextureRect = $SkinLayer/GreenSlider/GreenHandle
 @onready var blue_handle: TextureRect = $SkinLayer/BlueSlider/BlueHandle
+@onready var rgb_mix_box: TextureRect = $SkinLayer/RGBMixBox
 
 # EYE 단계 노드
 @onready var eye_layer: TextureRect = $EyeLayer
@@ -105,6 +107,12 @@ var target_hair_option: int = 2  # 예시 타겟 옵션
 @onready var eye_lash_no_btn: Button = $EyeLayer/LashNoButton
 @onready var eye_lash_out_btn: Button = $EyeLayer/LashOutButton
 @onready var preview_head: TextureRect = $PreviewLayer/PreviewHead
+
+# PreviewHead 내부 눈 요소 노드
+@onready var preview_eye_shape: TextureRect = $PreviewLayer/PreviewHead/EyeShape
+@onready var preview_eye_color: TextureRect = $PreviewLayer/PreviewHead/EyeColor
+@onready var preview_eye_brow: TextureRect = $PreviewLayer/PreviewHead/EyeBrow
+@onready var preview_eye_lash: TextureRect = $PreviewLayer/PreviewHead/EyeLash
 
 # NOSE 단계 노드
 @onready var nose_layer: TextureRect = $NoseLayer
@@ -145,6 +153,20 @@ var target_hair_option: int = 2  # 예시 타겟 옵션
 # 텍스처 리소스
 var skin_handle_texture: Texture2D = preload("res://assets/production/skin/skin_handle.svg")
 
+# Output 눈 리소스 (실제 PreviewHead에 표시될 이미지)
+var output_eye_shape_cat: Texture2D = preload("res://assets/output/eye/eye_shape_cat.png")
+var output_eye_shape_dog: Texture2D = preload("res://assets/output/eye/eye_shape_dog.png")
+var output_eye_shape_rabbit: Texture2D = preload("res://assets/output/eye/eye_shape_rabbit.png")
+var output_eye_color_black: Texture2D = preload("res://assets/output/eye/eye_color_black.png")
+var output_eye_color_blue: Texture2D = preload("res://assets/output/eye/eye_color_blue.png")
+var output_eye_color_red: Texture2D = preload("res://assets/output/eye/eye_color_red.png")
+var output_eye_brow_down: Texture2D = preload("res://assets/output/eye/eye_brow_down.png")
+var output_eye_brow_flat: Texture2D = preload("res://assets/output/eye/eye_brow_flat.png")
+var output_eye_brow_up: Texture2D = preload("res://assets/output/eye/eye_brow_up.png")
+var output_eye_lash_in: Texture2D = preload("res://assets/output/eye/eye_lash_in.png")
+var output_eye_lash_out: Texture2D = preload("res://assets/output/eye/eye_lash_out.png")
+
+# Production 눈 리소스 (UI 버튼용)
 var eye_shape_cat: Texture2D = preload("res://assets/production/eye/eye_shape_cat.png")
 var eye_shape_dog: Texture2D = preload("res://assets/production/eye/eye_shape_dog.png")
 var eye_shape_rabbit: Texture2D = preload("res://assets/production/eye/eye_shape_rabbit.png")
@@ -227,7 +249,7 @@ func _ready() -> void:
 	
 	if preview_head:
 		preview_head.visible = true
-		preview_head.modulate = Color(0, 0, 0, 1)  # 초기 색상 (검정, 완전 불투명)
+		# 초기에는 원래 이미지 색상 유지 (modulate 설정 안 함)
 	
 	# 다른 레이어들의 z_index 설정 (PreviewLayer보다 낮게)
 	if skin_layer:
@@ -364,7 +386,9 @@ func _initialize_skin_ui() -> void:
 	green_slider.value = 0
 	blue_slider.value = 0
 	
-	# 초기 핸들 위치 및 head 색상 업데이트
+	# RGBMixBox는 초기에 원래 이미지 유지 (modulate 설정 안 함)
+	
+	# 초기 핸들 위치 업데이트
 	_update_all_sliders()
 
 func _initialize_eye_ui() -> void:
@@ -613,11 +637,19 @@ func _update_ui_for_step() -> void:
 	okay_button.visible = true
 	
 	if current_step == Step.HAIR:
-		# HAIR 단계: DONE 활성화, OKAY 비활성화 (회색)
-		done_button.disabled = false
-		done_button.modulate = Color(1, 1, 1, 1)  # 정상 색상
-		okay_button.disabled = true
-		okay_button.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색
+		# HAIR 단계: okay 누르기 전에는 OKAY만 활성화, 누른 후에는 DONE만 활성화
+		if hair_okay_pressed:
+			# okay를 눌렀으면 DONE 활성화, OKAY 비활성화
+			done_button.disabled = false
+			done_button.modulate = Color(1, 1, 1, 1)  # 정상 색상
+			okay_button.disabled = true
+			okay_button.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색
+		else:
+			# okay를 누르지 않았으면 OKAY 활성화, DONE 비활성화
+			okay_button.disabled = false
+			okay_button.modulate = Color(1, 1, 1, 1)  # 정상 색상
+			done_button.disabled = true
+			done_button.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색
 	else:
 		# 다른 단계: OKAY 활성화, DONE 비활성화 (회색)
 		okay_button.disabled = false
@@ -713,14 +745,19 @@ func _update_ui_for_step() -> void:
 	# HAIR 단계
 	if hair_layer:
 		hair_layer.visible = true
-		if current_step == Step.HAIR:
+		if current_step == Step.HAIR and not hair_okay_pressed:
+			# HAIR 단계이고 okay를 누르지 않았을 때만 활성화
 			hair_layer.modulate = Color(1, 1, 1, 1)  # 정상 색상
 			hair_layer.mouse_filter = Control.MOUSE_FILTER_STOP
 			hair_option_button_left.disabled = false
 			hair_option_button_right.disabled = false
 		else:
+			# 다른 단계이거나 okay를 눌렀으면 비활성화
 			hair_layer.modulate = Color(0.5, 0.5, 0.5, 0.5)  # 회색 반투명
 			hair_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			if hair_option_button_left and hair_option_button_right:
+				hair_option_button_left.disabled = true
+				hair_option_button_right.disabled = true
 	
 	# COMPLETED 단계면 Result 씬으로 전환
 	if current_step == Step.COMPLETED:
@@ -739,9 +776,10 @@ func _on_slider_value_changed(value: float) -> void:
 	player_g = int(green_slider.value)
 	player_b = int(blue_slider.value)
 	
-	# PreviewHead 색상 업데이트 (0~1 범위로 변환, 알파는 항상 1.0)
+	# RGBMixBox 색상만 업데이트 (0~1 범위로 변환)
 	var current_color = Color(player_r / 255.0, player_g / 255.0, player_b / 255.0, 1.0)
-	preview_head.modulate = current_color
+	if rgb_mix_box:
+		rgb_mix_box.modulate = current_color
 	
 	print("피부 색상 변경: R=%d G=%d B=%d" % [player_r, player_g, player_b])
 	
@@ -798,6 +836,57 @@ func _update_all_sliders() -> void:
 func _calculate_rgb_distance(r1: int, g1: int, b1: int, r2: int, g2: int, b2: int) -> int:
 	return abs(r1 - r2) + abs(g1 - g2) + abs(b1 - b2)
 
+func _apply_eye_to_preview() -> void:
+	# Eye Shape 적용
+	if preview_eye_shape:
+		match player_eye_shape:
+			"cat":
+				preview_eye_shape.texture = output_eye_shape_cat
+			"dog":
+				preview_eye_shape.texture = output_eye_shape_dog
+			"rabbit":
+				preview_eye_shape.texture = output_eye_shape_rabbit
+		preview_eye_shape.visible = true
+	
+	# Eye Color 적용
+	if preview_eye_color:
+		match player_eye_color:
+			"black":
+				preview_eye_color.texture = output_eye_color_black
+			"blue":
+				preview_eye_color.texture = output_eye_color_blue
+			"red":
+				preview_eye_color.texture = output_eye_color_red
+		preview_eye_color.visible = true
+	
+	# Eye Brow 적용
+	if preview_eye_brow:
+		match player_eye_brow:
+			"down":
+				preview_eye_brow.texture = output_eye_brow_down
+			"flat":
+				preview_eye_brow.texture = output_eye_brow_flat
+			"up":
+				preview_eye_brow.texture = output_eye_brow_up
+		preview_eye_brow.visible = true
+	
+	# Eye Lash 적용
+	if preview_eye_lash:
+		if player_eye_lash == "no":
+			# no를 선택하면 이미지 없이 숨김
+			preview_eye_lash.visible = false
+		else:
+			match player_eye_lash:
+				"in":
+					preview_eye_lash.texture = output_eye_lash_in
+				"out":
+					preview_eye_lash.texture = output_eye_lash_out
+			preview_eye_lash.visible = true
+	
+	print("PreviewHead에 눈 적용 완료: shape=%s color=%s brow=%s lash=%s size=%d" % [
+		player_eye_shape, player_eye_color, player_eye_brow, player_eye_lash, player_eye_size
+	])
+
 # === EYE 단계 함수 ===
 
 func _on_eye_shape_changed(shape: String) -> void:
@@ -850,34 +939,8 @@ func _on_eye_size_drag_ended(_value_changed: bool) -> void:
 
 func _on_done_button_pressed() -> void:
 	_play_sound(sound_button_done)
-	# HAIR 단계에서만 DONE 버튼 작동
-	if current_step == Step.HAIR:
-		# 점수 계산
-		var hair_score = 0
-		
-		# 색상 점수 (RGB 거리로 계산, 50점)
-		var color_distance = _calculate_rgb_distance(player_hair_r, player_hair_g, player_hair_b, 
-			target_hair_r, target_hair_g, target_hair_b)
-		var color_score = max(0, 50 - color_distance / 10.0)  # 거리에 따라 점수 차감
-		hair_score += color_score
-		
-		# 옵션 점수 (50점)
-		if player_hair_option == target_hair_option:
-			hair_score += 50
-		
-		# 최종 값 저장
-		mask_data["hair_r"] = player_hair_r
-		mask_data["hair_g"] = player_hair_g
-		mask_data["hair_b"] = player_hair_b
-		mask_data["hair_option"] = player_hair_option
-		mask_data["hair_score"] = hair_score
-		payout += hair_score
-		
-		print("머리 저장: RGB(%d,%d,%d) 옵션=%d | 점수: %d | 총점: %d" % [
-			player_hair_r, player_hair_g, player_hair_b, 
-			player_hair_option, hair_score, payout
-		])
-		
+	# HAIR 단계에서만 DONE 버튼 작동 (okay를 눌러야 활성화됨)
+	if current_step == Step.HAIR and hair_okay_pressed:
 		print("머리 단계 완료 - 모든 커스터마이징 완료!")
 		current_step = Step.COMPLETED
 		_update_ui_for_step()
@@ -887,6 +950,11 @@ func _on_okay_button_pressed() -> void:
 	if current_step == Step.SKIN:
 		# 조건 체크 없이 현재 선택한 값 저장
 		var distance = _calculate_rgb_distance(player_r, player_g, player_b, target_r, target_g, target_b)
+		
+		# PreviewHead 색상 업데이트 (okay 버튼 누를 때만)
+		var current_color = Color(player_r / 255.0, player_g / 255.0, player_b / 255.0, 1.0)
+		if preview_head:
+			preview_head.modulate = current_color
 		
 		# 최종 값 저장
 		mask_data["skin_color"] = Color(player_r / 255.0, player_g / 255.0, player_b / 255.0)
@@ -943,6 +1011,9 @@ func _on_okay_button_pressed() -> void:
 			player_eye_shape, player_eye_color, player_eye_brow, player_eye_lash, 
 			size_names[player_eye_size], correct_count, eye_score, payout
 		])
+		
+		# PreviewHead에 눈 적용
+		_apply_eye_to_preview()
 		
 		current_step = Step.NOSE
 		_update_ui_for_step()
@@ -1036,9 +1107,37 @@ func _on_okay_button_pressed() -> void:
 		_update_ui_for_step()
 	
 	elif current_step == Step.HAIR:
-		# HAIR 단계에서는 OKAY 버튼이 아니라 DONE 버튼을 사용해야 함
-		print("HAIR 단계에서는 DONE 버튼을 눌러주세요!")
-		pass
+		# HAIR 단계에서 okay 버튼 누르면 값 저장
+		# 점수 계산
+		var hair_score = 0
+		
+		# 색상 점수 (RGB 거리로 계산, 50점)
+		var color_distance = _calculate_rgb_distance(player_hair_r, player_hair_g, player_hair_b, 
+			target_hair_r, target_hair_g, target_hair_b)
+		var color_score = max(0, 50 - color_distance / 10.0)  # 거리에 따라 점수 차감
+		hair_score += color_score
+		
+		# 옵션 점수 (50점)
+		if player_hair_option == target_hair_option:
+			hair_score += 50
+		
+		# 최종 값 저장
+		mask_data["hair_r"] = player_hair_r
+		mask_data["hair_g"] = player_hair_g
+		mask_data["hair_b"] = player_hair_b
+		mask_data["hair_option"] = player_hair_option
+		mask_data["hair_score"] = hair_score
+		payout += hair_score
+		
+		print("머리 저장: RGB(%d,%d,%d) 옵션=%d | 점수: %d | 총점: %d" % [
+			player_hair_r, player_hair_g, player_hair_b, 
+			player_hair_option, hair_score, payout
+		])
+		
+		# okay를 눌렀음을 표시
+		hair_okay_pressed = true
+		# UI 업데이트하여 DONE 버튼 활성화
+		_update_ui_for_step()
 
 func _on_reset_button_pressed() -> void:
 	_play_sound(sound_button_reset)
@@ -1083,6 +1182,7 @@ func _on_reset_button_pressed() -> void:
 	player_hair_r = 0
 	player_hair_g = 0
 	player_hair_b = 0
+	hair_okay_pressed = false
 	
 	mask_creation_timer.stop()
 	mask_creation_timer.start()
@@ -1141,6 +1241,7 @@ func _on_mask_creation_timer_timeout() -> void:
 	player_hair_r = 0
 	player_hair_g = 0
 	player_hair_b = 0
+	hair_okay_pressed = false
 	
 	mask_creation_timer.start()
 	_initialize_skin_ui()

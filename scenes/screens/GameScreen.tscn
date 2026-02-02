@@ -415,10 +415,10 @@ expand_mode = 1
 
 [node name="MouthSizeArrow" type="TextureRect" parent="MouthLayer" unique_id=1694012353]
 layout_mode = 0
-offset_left = 81.0
-offset_top = 71.0
-offset_right = 99.0
-offset_bottom = 98.69231
+offset_left = 75.0
+offset_top = 69.0
+offset_right = 102.0
+offset_bottom = 110.53846
 pivot_offset = Vector2(10, 10)
 texture = ExtResource("38_mouth_arrow")
 expand_mode = 1
@@ -612,6 +612,50 @@ offset_bottom = 451.67426
 texture = ExtResource("6_head_img")
 expand_mode = 1
 
+[node name="EyeShape" type="TextureRect" parent="PreviewLayer/PreviewHead" unique_id=1070669680]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EyeColor" type="TextureRect" parent="PreviewLayer/PreviewHead" unique_id=1876392198]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EyeBrow" type="TextureRect" parent="PreviewLayer/PreviewHead" unique_id=903948782]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EyeLash" type="TextureRect" parent="PreviewLayer/PreviewHead" unique_id=803760406]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -711.0
+offset_top = -782.0
+offset_right = -711.0
+offset_bottom = -782.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
 [node name="OkayButton" type="Button" parent="PreviewLayer" unique_id=1251267905]
 layout_mode = 0
 offset_left = 86.0
@@ -627,9 +671,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 56.813553
+offset_left = 50.0
 offset_top = 57.0
-offset_right = -844.0
+offset_right = -855.0
 offset_bottom = -539.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -638,9 +682,9 @@ expand_mode = 1
 
 [node name="TimerBox" type="TextureRect" parent="TimerLayer" unique_id=427431922]
 layout_mode = 0
-offset_left = 21.186447
+offset_left = 17.0
 offset_top = 10.0
-offset_right = 240.04356
+offset_right = 235.85712
 offset_bottom = 46.0
 texture = ExtResource("7_timer_box")
 expand_mode = 1
