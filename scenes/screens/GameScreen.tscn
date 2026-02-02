@@ -716,8 +716,8 @@ one_shot = true
 [node name="OrderForm" type="TextureRect" parent="." unique_id=1800000001]
 layout_mode = 0
 offset_left = 945.0
-offset_top = 262.0
-offset_right = 1125.0
+offset_top = 252.43079
+offset_right = 1131.0
 offset_bottom = 549.0769
 texture = ExtResource("44_order_form")
 expand_mode = 1
@@ -738,9 +738,9 @@ expand_mode = 1
 
 [node name="OrderTargetImage" type="TextureRect" parent="OrderLayer" unique_id=1800000002]
 layout_mode = 0
-offset_left = 261.0
-offset_top = -46.0
-offset_right = 432.0
-offset_bottom = 304.0
+offset_left = 39.000023
+offset_top = 22.0
+offset_right = 147.00003
+offset_bottom = 116.0
 texture = ExtResource("9_preview_layer")
 expand_mode = 1
