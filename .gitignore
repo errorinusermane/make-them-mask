@@ -1,3 +1,15 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Build outputs
+builds/
+*.app
+*.exe
+*.pck
+*.x86_64
+*.dmg
+*.zip
+
+# Export presets (may contain sensitive data)
+export_presets.cfg
